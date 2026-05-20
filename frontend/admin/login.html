@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion Admin — Hôtel Ricardo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root { --gold:#C9920A; --brown:#3D1F08; --dark:#1C1208; --cream:#F5EDD6; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Lato',sans-serif; min-height:100vh; display:flex; background:linear-gradient(135deg,#1C1208 0%,#3D1F08 40%,#1A3A1A 100%); }
+    .login-left {
+      flex:1; display:flex; align-items:center; justify-content:center; padding:40px;
+      background:linear-gradient(160deg,rgba(0,0,0,.4),rgba(0,0,0,.1));
+    }
+    .login-left-content { color:white; max-width:420px; }
+    .hotel-logo { display:flex; align-items:center; gap:14px; margin-bottom:40px; }
+    .logo-icon { width:52px; height:52px; background:var(--gold); border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:22px; }
+    .logo-text .name { font-family:'Playfair Display',serif; font-size:20px; font-weight:700; letter-spacing:2px; }
+    .logo-text .city { font-size:11px; letter-spacing:3px; color:var(--gold); }
+    .login-left h1 { font-family:'Playfair Display',serif; font-size:38px; font-weight:700; margin-bottom:16px; }
+    .login-left h1 span { color:var(--gold); }
+    .login-left p { color:rgba(255,255,255,.6); font-size:15px; line-height:1.7; margin-bottom:32px; }
+    .feature { display:flex; align-items:center; gap:12px; margin-bottom:14px; color:rgba(255,255,255,.7); font-size:14px; }
+    .feature i { color:var(--gold); width:20px; }
+
+    .login-right { width:420px; background:white; display:flex; align-items:center; justify-content:center; padding:40px; flex-shrink:0; }
+    .login-box { width:100%; max-width:360px; }
+    .login-box h2 { font-family:'Playfair Display',serif; font-size:26px; color:var(--brown); margin-bottom:6px; }
+    .login-box p { color:#7A6A5A; font-size:13px; margin-bottom:30px; }
+    .form-group { margin-bottom:18px; }
+    .form-group label { display:block; font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:#9A6E08; margin-bottom:6px; }
+    .input-wrap { position:relative; }
+    .input-wrap i { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:#7A6A5A; font-size:15px; }
+    .input-wrap input { width:100%; padding:12px 14px 12px 38px; border:1.5px solid #E8DCC8; border-radius:8px; font-size:14px; color:var(--brown); background:#FDF8EE; transition:.2s; }
+    .input-wrap input:focus { outline:none; border-color:var(--gold); background:white; }
+    .btn-login { width:100%; padding:14px; background:var(--gold); color:white; border:none; border-radius:8px; font-size:15px; font-weight:700; cursor:pointer; letter-spacing:1px; transition:.2s; margin-top:8px; }
+    .btn-login:hover { background:#9A6E08; }
+    .alert { padding:12px 14px; border-radius:8px; margin-bottom:16px; font-size:13px; display:flex; align-items:center; gap:8px; }
+    .alert-error { background:rgba(200,30,30,.1); border:1px solid rgba(200,30,30,.2); color:#8B1A1A; }
+    .demo-info { background:#FDF8EE; border:1px solid #E8DCC8; border-radius:8px; padding:14px; margin-top:20px; font-size:12px; color:#7A6A5A; }
+    .demo-info strong { color:var(--brown); }
+    .spinner { display:inline-block; width:16px; height:16px; border:2px solid rgba(255,255,255,.3); border-top-color:white; border-radius:50%; animation:spin .7s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    @media (max-width:768px) { .login-left { display:none; } .login-right { width:100%; } }
+  </style>
+</head>
+<body>
+
+<div class="login-left">
+  <div class="login-left-content">
+    <div class="hotel-logo">
+      <div class="logo-icon"><i class="fas fa-crown" style="color:white"></i></div>
+      <div class="logo-text">
+        <div class="name">HÔTEL RICARDO</div>
+        <div class="city">OUAGADOUGOU</div>
+      </div>
+    </div>
+    <h1>Tableau de Bord <span>Administrateur</span></h1>
+    <p>Gérez vos réservations, vos chambres et vos paiements depuis un seul endroit, simplement et efficacement.</p>
+    <div class="feature"><i class="fas fa-calendar-check"></i> Gestion des réservations en temps réel</div>
+    <div class="feature"><i class="fas fa-credit-card"></i> Suivi des paiements multi-canaux</div>
+    <div class="feature"><i class="fas fa-bed"></i> Gestion du parc de chambres</div>
+    <div class="feature"><i class="fas fa-chart-line"></i> Statistiques et rapports</div>
+    <div class="feature"><i class="fas fa-envelope"></i> Messages des clients</div>
+  </div>
+</div>
+
+<div class="login-right">
+  <div class="login-box">
+    <h2>Connexion</h2>
+    <p>Accès réservé à l'équipe de l'Hôtel Ricardo</p>
+    <div id="alertBox"></div>
+    <div class="form-group">
+      <label>Adresse Email</label>
+      <div class="input-wrap">
+        <i class="fas fa-envelope"></i>
+        <input type="email" id="email" placeholder="admin@hotelricardo.com" value="admin@hotelricardo.com">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Mot de Passe</label>
+      <div class="input-wrap">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="password" placeholder="••••••••" value="Ricardo@2024!">
+      </div>
+    </div>
+    <button class="btn-login" id="btnLogin" onclick="login()">
+      <i class="fas fa-sign-in-alt"></i> Se Connecter
+    </button>
+    <div class="demo-info">
+      <strong>Identifiants de démonstration :</strong><br>
+      Email: <strong>admin@hotelricardo.com</strong><br>
+      Mot de passe: <strong>Ricardo@2024!</strong>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = 'http://localhost:3000/api';
+
+// Si déjà connecté, rediriger
+if (localStorage.getItem('admin_token')) {
+  window.location.href = 'dashboard.html';
+}
+
+async function login() {
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const btn = document.getElementById('btnLogin');
+
+  if (!email || !password) {
+    showAlert('Veuillez remplir tous les champs.');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Connexion...';
+
+  try {
+    const r = await fetch(`${API}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await r.json();
+
+    if (!r.ok) throw new Error(data.error || 'Identifiants incorrects');
+
+    localStorage.setItem('admin_token', data.token);
+    localStorage.setItem('admin_user', JSON.stringify(data.user));
+    window.location.href = 'dashboard.html';
+  } catch (e) {
+    // Mode démo sans backend
+    if (email === 'admin@hotelricardo.com' && password === 'Ricardo@2024!') {
+      localStorage.setItem('admin_token', 'demo_token_' + Date.now());
+      localStorage.setItem('admin_user', JSON.stringify({ name: 'Administrateur Ricardo', email: 'admin@hotelricardo.com', role: 'admin' }));
+      window.location.href = 'dashboard.html';
+      return;
+    }
+    showAlert(e.message);
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Se Connecter';
+}
+
+function showAlert(msg) {
+  document.getElementById('alertBox').innerHTML = `<div class="alert alert-error"><i class="fas fa-exclamation-circle"></i> ${msg}</div>`;
+}
+
+document.getElementById('password').addEventListener('keypress', e => { if (e.key === 'Enter') login(); });
+</script>
+</body>
+</html>

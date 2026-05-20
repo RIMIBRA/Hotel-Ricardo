@@ -1,0 +1,224 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "created_at": "2026-05-20 13:36:13",
+      "name": "Administrateur Ricardo",
+      "email": "admin@hotelricardo.com",
+      "password": "$2a$10$7Hi8JNYstuS6LPSwv/RNie0CB5Q4PMrRNnITixoasfLkO6RYGC5KK",
+      "role": "admin"
+    }
+  ],
+  "rooms": [
+    {
+      "id": 1,
+      "created_at": "2026-05-20 13:36:13",
+      "name": "Chambre Simple",
+      "type": "simple",
+      "description": "Chambre confortable avec décoration africaine, idéale pour un voyageur solo. Vue sur le jardin tropical.",
+      "price": 32000,
+      "capacity": 1,
+      "size": "18 m²",
+      "image": "",
+      "amenities": [
+        "Climatisation",
+        "TV écran plat",
+        "WiFi gratuit",
+        "Salle de bain privée",
+        "Bureau de travail",
+        "Coffre-fort"
+      ],
+      "available": 1
+    },
+    {
+      "id": 2,
+      "created_at": "2026-05-20 13:36:13",
+      "name": "Chambre Double",
+      "type": "double",
+      "description": "Chambre spacieuse avec grand lit double, décorée d'œuvres d'art africaines authentiques. Vue jardin ou piscine.",
+      "price": 37000,
+      "capacity": 2,
+      "size": "24 m²",
+      "image": "",
+      "amenities": [
+        "Climatisation",
+        "TV écran plat",
+        "WiFi gratuit",
+        "Salle de bain privée",
+        "Grand lit double",
+        "Terrasse privée",
+        "Mini-bar"
+      ],
+      "available": 1
+    },
+    {
+      "id": 3,
+      "created_at": "2026-05-20 13:36:13",
+      "name": "Chambre Twin",
+      "type": "twin",
+      "description": "Chambre avec deux lits simples, parfaite pour deux amis ou collègues. Ambiance safari chic.",
+      "price": 37000,
+      "capacity": 2,
+      "size": "24 m²",
+      "image": "",
+      "amenities": [
+        "Climatisation",
+        "TV écran plat",
+        "WiFi gratuit",
+        "Salle de bain privée",
+        "Deux lits simples",
+        "Bureau de travail"
+      ],
+      "available": 1
+    },
+    {
+      "id": 4,
+      "created_at": "2026-05-20 13:36:13",
+      "name": "Chambre Familiale",
+      "type": "familiale",
+      "description": "Grande chambre familiale pouvant accueillir jusqu'à 4 personnes. Espace salon séparé et vue directe sur la piscine.",
+      "price": 52000,
+      "capacity": 4,
+      "size": "35 m²",
+      "image": "",
+      "amenities": [
+        "Climatisation",
+        "TV écran plat",
+        "WiFi gratuit",
+        "Salle de bain privée",
+        "Espace salon",
+        "Vue piscine",
+        "Réfrigérateur",
+        "Bouilloire"
+      ],
+      "available": 1
+    },
+    {
+      "id": 5,
+      "created_at": "2026-05-20 13:36:13",
+      "name": "Suite Junior",
+      "type": "suite_junior",
+      "description": "Suite élégante avec salon séparé, baignoire et décoration Out of Africa raffinée.",
+      "price": 65000,
+      "capacity": 2,
+      "size": "45 m²",
+      "image": "",
+      "amenities": [
+        "Climatisation",
+        "TV écran plat 50\"",
+        "WiFi haut débit",
+        "Salle de bain luxueuse",
+        "Baignoire",
+        "Salon privé",
+        "Mini-bar premium",
+        "Terrasse",
+        "Service chambre 24h"
+      ],
+      "available": 1
+    },
+    {
+      "id": 6,
+      "created_at": "2026-05-20 13:36:13",
+      "name": "Suite Présidentielle",
+      "type": "suite_presidentielle",
+      "description": "Le summum du luxe à Ouagadougou. Salon, salle à manger, kitchenette et grande terrasse avec vue panoramique.",
+      "price": 85000,
+      "capacity": 4,
+      "size": "80 m²",
+      "image": "",
+      "amenities": [
+        "Climatisation multi-zones",
+        "TV 4K 65\"",
+        "WiFi fibre optique",
+        "Salle de bain marbre",
+        "Jacuzzi",
+        "Salon & salle à manger",
+        "Kitchenette",
+        "Grande terrasse panoramique",
+        "Butler personnel",
+        "Service chambre 24h",
+        "Fruits & champagne à l'arrivée"
+      ],
+      "available": 1
+    }
+  ],
+  "reservations": [
+    {
+      "id": 1,
+      "created_at": "2026-05-20 13:44:08",
+      "reference": "RIC-2605-5788",
+      "client_name": "LKBK",
+      "client_email": "LKNKMKJ@gmail.com",
+      "client_phone": "66776767887",
+      "room_id": 1,
+      "check_in": "2026-05-20",
+      "check_out": "2026-05-21",
+      "guests": 2,
+      "nights": 1,
+      "room_price": 32000,
+      "total_price": 40000,
+      "breakfast": 1,
+      "breakfast_total": 8000,
+      "special_requests": "",
+      "status": "confirmee",
+      "payment_status": "paye",
+      "updated_at": "2026-05-20 13:44:54"
+    },
+    {
+      "id": 2,
+      "created_at": "2026-05-20 13:48:34",
+      "reference": "RIC-2605-1630",
+      "client_name": "N?? B",
+      "client_email": "BKHLNNJK@NB",
+      "client_phone": "7767678",
+      "room_id": 2,
+      "check_in": "2026-05-20",
+      "check_out": "2026-05-21",
+      "guests": 2,
+      "nights": 1,
+      "room_price": 37000,
+      "total_price": 37000,
+      "breakfast": 0,
+      "breakfast_total": 0,
+      "special_requests": "",
+      "status": "confirmee",
+      "payment_status": "paye",
+      "updated_at": "2026-05-20 13:48:50"
+    }
+  ],
+  "payments": [
+    {
+      "id": 1,
+      "created_at": "2026-05-20 13:44:46",
+      "reservation_id": 1,
+      "method": "orange_money",
+      "phone": "878767678",
+      "amount": 40000,
+      "currency": "XOF",
+      "transaction_id": "TXN-C84CE7B7B742",
+      "status": "paye",
+      "operator_ref": "TXN-C84CE7B7B742",
+      "updated_at": "2026-05-20 13:44:54"
+    },
+    {
+      "id": 2,
+      "created_at": "2026-05-20 13:48:47",
+      "reservation_id": 2,
+      "method": "moov_money",
+      "phone": "898878786",
+      "amount": 37000,
+      "currency": "XOF",
+      "transaction_id": "TXN-D815DD815C02",
+      "status": "paye",
+      "operator_ref": "TXN-D815DD815C02",
+      "updated_at": "2026-05-20 13:48:50"
+    }
+  ],
+  "contact_messages": [],
+  "_counters": {
+    "users": 1,
+    "rooms": 6,
+    "reservations": 2,
+    "payments": 2
+  }
+}

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paiements — Admin Hôtel Ricardo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-brand"><div class="brand-icon"><i class="fas fa-crown"></i></div><div class="brand-text"><div class="hotel-name">HÔTEL RICARDO</div><div class="hotel-sub">Administration</div></div></div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Principal</div>
+    <a href="dashboard.html" class="nav-item"><i class="fas fa-th-large"></i> Tableau de bord</a>
+    <a href="reservations.html" class="nav-item"><i class="fas fa-calendar-check"></i> Réservations</a>
+    <a href="paiements.html" class="nav-item active"><i class="fas fa-credit-card"></i> Paiements</a>
+    <div class="nav-section-label">Gestion</div>
+    <a href="chambres.html" class="nav-item"><i class="fas fa-bed"></i> Chambres</a>
+    <a href="messages.html" class="nav-item"><i class="fas fa-envelope"></i> Messages</a>
+    <a href="../index.html" class="nav-item" target="_blank"><i class="fas fa-globe"></i> Voir le site</a>
+  </nav>
+  <div class="sidebar-footer"><div class="sidebar-user"><div class="user-avatar">A</div><div class="user-info"><div class="user-name">Administrateur</div></div><button class="btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button></div></div>
+</aside>
+
+<div class="main-content">
+  <div class="topbar">
+    <div class="topbar-title"><h1>Paiements</h1><p>Suivi des transactions et revenus</p></div>
+    <div class="topbar-actions">
+      <div style="background:white;border:1px solid var(--border);border-radius:8px;padding:8px 16px;font-size:13px">
+        Revenus totaux: <strong style="color:var(--gold)" id="totalRevDisplay">–</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- RÉSUMÉ PAR MÉTHODE -->
+    <div id="methodsGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px">
+      <!-- Chargé via JS -->
+    </div>
+
+    <!-- FILTRES -->
+    <div class="card" style="margin-bottom:20px">
+      <div class="card-body" style="display:flex;gap:10px;flex-wrap:wrap">
+        <input class="search-input" id="searchInput" placeholder="Référence, client..." oninput="filterPayments()">
+        <select class="filter-select" id="methodFilter" onchange="filterPayments()">
+          <option value="">Toutes les méthodes</option>
+          <option value="orange_money">Orange Money</option>
+          <option value="moov_money">Moov Money</option>
+          <option value="telecel_money">Telecel Money</option>
+          <option value="coris_money">Coris Money</option>
+          <option value="stripe">Carte bancaire</option>
+          <option value="paypal">PayPal</option>
+        </select>
+        <select class="filter-select" id="statusFilter" onchange="filterPayments()">
+          <option value="">Tous les statuts</option>
+          <option value="paye">Payé</option>
+          <option value="en_attente">En attente</option>
+          <option value="echoue">Échoué</option>
+          <option value="rembourse">Remboursé</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- TABLE PAIEMENTS -->
+    <div class="card">
+      <div class="card-body" style="padding:0">
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>ID Transaction</th><th>Réservation</th><th>Client</th><th>Méthode</th><th>Téléphone</th><th>Montant</th><th>Statut</th><th>Date</th><th>Actions</th></tr></thead>
+            <tbody id="payTableBody"><tr><td colspan="9" style="text-align:center;padding:40px;color:#7A6A5A"><i class="fas fa-circle-notch fa-spin"></i></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/admin.js"></script>
+<script>
+checkAuth();
+let allPayments = [];
+
+const DEMO_PAYMENTS = [
+  { id:1, transaction_id:'TXN-ABCD1234EF56', reservation_id:1, reference:'RIC-2605-1234', client_name:'Aminata Traoré', client_email:'aminata@email.com', method:'orange_money', phone:'+226 70112233', amount:74000, currency:'XOF', status:'paye', created_at:'2026-05-20T10:25:00' },
+  { id:2, transaction_id:'TXN-EFGH5678IJ90', reservation_id:3, reference:'RIC-2605-9012', client_name:'Marie Dupont', client_email:'marie@email.com', method:'stripe', phone:null, amount:255000, currency:'XOF', status:'paye', created_at:'2026-05-19T16:35:00' },
+  { id:3, transaction_id:'TXN-KLMN9012OP34', reservation_id:4, reference:'RIC-2605-3456', client_name:'Kofi Mensah', client_email:'kofi@email.com', method:'moov_money', phone:'+233 244112233', amount:32000, currency:'XOF', status:'paye', created_at:'2026-05-18T14:15:00' },
+  { id:4, transaction_id:'TXN-QRST3456UV78', reservation_id:2, reference:'RIC-2605-5678', client_name:'Jean-Pierre Ouédraogo', client_email:'jp@email.com', method:'telecel_money', phone:'+226 76556677', amount:130000, currency:'XOF', status:'en_attente', created_at:'2026-05-20T08:50:00' },
+  { id:5, transaction_id:'TXN-WXYZ7890AB12', reservation_id:5, reference:'RIC-2605-7890', client_name:'Fatou Diallo', client_email:'fatou@email.com', method:'paypal', phone:null, amount:208000, currency:'XOF', status:'en_attente', created_at:'2026-05-20T12:00:00' }
+];
+
+async function loadPayments() {
+  allPayments = DEMO_PAYMENTS;
+  try {
+    const r = await apiFetch('/payments');
+    if (r && r.ok) allPayments = await r.json();
+  } catch {}
+
+  // Calcul total
+  const total = allPayments.filter(p => p.status === 'paye').reduce((s, p) => s + p.amount, 0);
+  document.getElementById('totalRevDisplay').textContent = formatCFA(total);
+
+  // Résumé par méthode
+  const methods = {};
+  allPayments.forEach(p => {
+    if (!methods[p.method]) methods[p.method] = { total:0, count:0 };
+    if (p.status === 'paye') methods[p.method].total += p.amount;
+    methods[p.method].count++;
+  });
+  const colors = { orange_money:'#FF6600', moov_money:'#0066CC', telecel_money:'#CC0000', coris_money:'#006633', stripe:'#1A1F71', paypal:'#003087' };
+  const labels = { orange_money:'🟠 Orange Money', moov_money:'🔵 Moov Money', telecel_money:'🔴 Telecel Money', coris_money:'💚 Coris Money', stripe:'💳 Carte bancaire', paypal:'🅿️ PayPal' };
+  document.getElementById('methodsGrid').innerHTML = Object.entries(methods).map(([m, data]) => `
+    <div style="background:white;border-radius:10px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.08);border-left:4px solid ${colors[m]||'#ccc'}">
+      <div style="font-size:14px;font-weight:700;margin-bottom:8px">${labels[m]||m}</div>
+      <div style="font-size:22px;font-weight:700;color:${colors[m]||'#333'}">${(data.total/1000).toFixed(0)}k FCFA</div>
+      <div style="font-size:12px;color:#7A6A5A">${data.count} transaction(s)</div>
+    </div>
+  `).join('');
+
+  renderPayments(allPayments);
+}
+
+function renderPayments(payments) {
+  const tbody = document.getElementById('payTableBody');
+  if (!payments.length) { tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px">Aucun paiement trouvé</td></tr>'; return; }
+  tbody.innerHTML = payments.map(p => `
+    <tr>
+      <td style="font-family:monospace;font-size:11px">${p.transaction_id}</td>
+      <td><strong style="color:var(--brown)">${p.reference}</strong></td>
+      <td>${p.client_name}</td>
+      <td>${paymentMethodLabel(p.method)}</td>
+      <td style="font-size:12px">${p.phone||'–'}</td>
+      <td style="font-weight:700;color:var(--gold)">${formatCFA(p.amount)}</td>
+      <td>${badgeStatus(p.status)}</td>
+      <td style="font-size:12px">${formatDateTime(p.created_at)}</td>
+      <td>
+        ${p.status === 'paye' ? `<button onclick="refund(${p.id})" class="btn btn-danger btn-sm"><i class="fas fa-undo"></i> Rembourser</button>` : ''}
+        ${p.status === 'en_attente' ? `<button onclick="confirmPayment(${p.id})" class="btn btn-success btn-sm"><i class="fas fa-check"></i> Confirmer</button>` : ''}
+      </td>
+    </tr>
+  `).join('');
+}
+
+function filterPayments() {
+  const s = document.getElementById('searchInput').value.toLowerCase();
+  const m = document.getElementById('methodFilter').value;
+  const st = document.getElementById('statusFilter').value;
+  const f = allPayments.filter(p =>
+    (!s || p.reference?.toLowerCase().includes(s) || p.client_name?.toLowerCase().includes(s) || p.transaction_id.toLowerCase().includes(s)) &&
+    (!m || p.method === m) && (!st || p.status === st)
+  );
+  renderPayments(f);
+}
+
+async function confirmPayment(id) {
+  const p = allPayments.find(x => x.id === id);
+  if (!p) return;
+  try {
+    const r = await apiFetch(`/payments/confirm`, { method:'POST', body: JSON.stringify({ transaction_id: p.transaction_id }) });
+    if (r && r.ok) { p.status = 'paye'; renderPayments(allPayments); return; }
+  } catch {}
+  p.status = 'paye';
+  renderPayments(allPayments);
+}
+
+async function refund(id) {
+  if (!confirm('Confirmer le remboursement ?')) return;
+  try {
+    const r = await apiFetch(`/payments/${id}/refund`, { method:'POST' });
+    if (r && r.ok) { allPayments.find(p => p.id === id).status = 'rembourse'; renderPayments(allPayments); return; }
+  } catch {}
+  allPayments.find(p => p.id === id).status = 'rembourse';
+  renderPayments(allPayments);
+}
+
+loadPayments();
+</script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — Hôtel Ricardo Ouagadougou</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="navbar scrolled" id="navbar">
+  <a href="index.html" class="navbar-logo">
+    <div class="logo-icon"><i class="fas fa-crown"></i></div>
+    <div class="logo-text">
+      <span class="hotel-name">HÔTEL RICARDO</span>
+      <span class="hotel-city">OUAGADOUGOU</span>
+    </div>
+  </a>
+  <ul class="navbar-menu" id="navMenu">
+    <li><a href="index.html">Accueil</a></li>
+    <li><a href="chambres.html">Chambres</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="contact.html" class="active">Contact</a></li>
+    <li><a href="reservation.html" class="btn-reserve">Réserver</a></li>
+  </ul>
+  <button class="navbar-toggle" id="navToggle"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="page-hero">
+  <div>
+    <div class="breadcrumb"><a href="index.html">Accueil</a><span>/</span><span>Contact</span></div>
+    <h1>Nous Contacter</h1>
+    <p>Notre équipe est disponible 24h/24 pour vous accueillir</p>
+  </div>
+</div>
+
+<section>
+  <div class="contact-grid">
+    <!-- Infos contact -->
+    <div>
+      <div class="contact-info-card">
+        <h3 style="font-family:var(--font-serif);font-size:22px;margin-bottom:28px;color:var(--gold)">Informations de Contact</h3>
+        <div class="contact-info-item">
+          <i class="fas fa-map-marker-alt"></i>
+          <div>
+            <h4>Adresse</h4>
+            <p>Secteur 15, Rue de l'Hôtel Ricardo<br>Ouagadougou, Burkina Faso<br>À 2,5 km de l'aéroport international</p>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <i class="fas fa-phone"></i>
+          <div>
+            <h4>Téléphone</h4>
+            <p>+226 25 XX XX XX (fixe)<br>+226 70 XX XX XX (mobile)</p>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <i class="fas fa-envelope"></i>
+          <div>
+            <h4>Email</h4>
+            <p>contact@hotelricardo.com<br>reservation@hotelricardo.com</p>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <i class="fas fa-clock"></i>
+          <div>
+            <h4>Horaires Réception</h4>
+            <p>24h/24, 7j/7<br>Restaurant: 7h – 22h</p>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <i class="fab fa-whatsapp"></i>
+          <div>
+            <h4>WhatsApp</h4>
+            <p>+226 70 XX XX XX<br><a href="#" style="color:var(--gold)">Discuter sur WhatsApp</a></p>
+          </div>
+        </div>
+        <!-- Carte placeholder -->
+        <div class="map-placeholder">
+          <div style="text-align:center">
+            <i class="fas fa-map-marked-alt" style="font-size:32px;display:block;margin-bottom:8px"></i>
+            <span style="font-size:13px">Carte Google Maps<br>Hôtel Ricardo — Ouagadougou</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulaire contact -->
+    <div>
+      <div class="form-card">
+        <h3><i class="fas fa-paper-plane"></i> Envoyer un Message</h3>
+        <div id="contactAlert"></div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Nom complet *</label>
+            <input type="text" id="contactName" placeholder="Votre nom" required>
+          </div>
+          <div class="form-group">
+            <label>Email *</label>
+            <input type="email" id="contactEmail" placeholder="votre@email.com" required>
+          </div>
+          <div class="form-group full">
+            <label>Sujet</label>
+            <select id="contactSubject">
+              <option>Demande de réservation</option>
+              <option>Renseignements tarifs</option>
+              <option>Événements & privatisation</option>
+              <option>Réclamation</option>
+              <option>Autre</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label>Message *</label>
+            <textarea id="contactMessage" rows="6" placeholder="Votre message..." required></textarea>
+          </div>
+        </div>
+        <button onclick="sendMessage()" class="btn btn-primary" id="btnContact" style="margin-top:8px">
+          <i class="fas fa-paper-plane"></i> Envoyer le message
+        </button>
+      </div>
+
+      <!-- FAQ rapide -->
+      <div class="form-card" style="margin-top:24px">
+        <h3><i class="fas fa-question-circle"></i> Questions Fréquentes</h3>
+        <div class="faq-list">
+          <details style="border-bottom:1px solid var(--cream);padding:14px 0;cursor:pointer">
+            <summary style="font-weight:600;color:var(--brown);font-size:14px">Quelle est la politique d'annulation ?</summary>
+            <p style="color:var(--text-light);font-size:13px;margin-top:10px;padding-left:12px">Annulation gratuite jusqu'à 48h avant l'arrivée. Au-delà, une nuit vous sera facturée.</p>
+          </details>
+          <details style="border-bottom:1px solid var(--cream);padding:14px 0;cursor:pointer">
+            <summary style="font-weight:600;color:var(--brown);font-size:14px">Proposez-vous un transfert aéroport ?</summary>
+            <p style="color:var(--text-light);font-size:13px;margin-top:10px;padding-left:12px">Oui, sur réservation au moins 24h à l'avance. Contactez la réception pour les tarifs.</p>
+          </details>
+          <details style="border-bottom:1px solid var(--cream);padding:14px 0;cursor:pointer">
+            <summary style="font-weight:600;color:var(--brown);font-size:14px">Le petit-déjeuner est-il inclus ?</summary>
+            <p style="color:var(--text-light);font-size:13px;margin-top:10px;padding-left:12px">Le petit-déjeuner est en option (4 000 FCFA / personne). Il peut être ajouté lors de la réservation.</p>
+          </details>
+          <details style="padding:14px 0;cursor:pointer">
+            <summary style="font-weight:600;color:var(--brown);font-size:14px">Quels sont les horaires de check-in/check-out ?</summary>
+            <p style="color:var(--text-light);font-size:13px;margin-top:10px;padding-left:12px">Check-in à partir de 12h00, check-out avant 12h00. Des horaires flexibles sont possibles sur demande.</p>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer style="background:var(--dark);color:white;text-align:center;padding:30px">
+  <p style="color:rgba(255,255,255,.4);font-size:13px">© 2024 Hôtel Ricardo Ouagadougou — Tous droits réservés</p>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+const API = 'http://localhost:3000/api';
+
+async function sendMessage() {
+  const name = document.getElementById('contactName').value.trim();
+  const email = document.getElementById('contactEmail').value.trim();
+  const subject = document.getElementById('contactSubject').value;
+  const message = document.getElementById('contactMessage').value.trim();
+
+  if (!name || !email || !message) {
+    document.getElementById('contactAlert').innerHTML = '<div class="alert alert-error"><i class="fas fa-exclamation-circle"></i> Veuillez remplir tous les champs obligatoires.</div>';
+    return;
+  }
+
+  const btn = document.getElementById('btnContact');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Envoi...';
+
+  try {
+    const r = await fetch(`${API}/dashboard/contact`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, subject, message })
+    });
+    const data = await r.json();
+    document.getElementById('contactAlert').innerHTML = `<div class="alert alert-success"><i class="fas fa-check-circle"></i> ${data.message}</div>`;
+    document.getElementById('contactName').value = '';
+    document.getElementById('contactEmail').value = '';
+    document.getElementById('contactMessage').value = '';
+  } catch {
+    document.getElementById('contactAlert').innerHTML = '<div class="alert alert-error"><i class="fas fa-exclamation-circle"></i> Erreur d\'envoi. Vérifiez que le serveur est actif.</div>';
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fas fa-paper-plane"></i> Envoyer le message';
+}
+</script>
+</body>
+</html>
