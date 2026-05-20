@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chambres & Suites — Hôtel Ricardo Ouagadougou</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="navbar scrolled" id="navbar">
+  <a href="index.html" class="navbar-logo">
+    <div class="logo-icon"><i class="fas fa-crown"></i></div>
+    <div class="logo-text">
+      <span class="hotel-name">HÔTEL RICARDO</span>
+      <span class="hotel-city">OUAGADOUGOU</span>
+    </div>
+  </a>
+  <ul class="navbar-menu" id="navMenu">
+    <li><a href="index.html">Accueil</a></li>
+    <li><a href="chambres.html" class="active">Chambres</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="reservation.html" class="btn-reserve">Réserver</a></li>
+  </ul>
+  <button class="navbar-toggle" id="navToggle"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="page-hero">
+  <div>
+    <div class="breadcrumb"><a href="index.html">Accueil</a><span>/</span><span>Chambres</span></div>
+    <h1>Chambres & Suites</h1>
+    <p>Découvrez nos 6 types d'hébergement, du confort simple à la suite présidentielle</p>
+  </div>
+</div>
+
+<!-- FILTRES -->
+<section style="padding:40px 5% 0">
+  <div style="background:white;border-radius:12px;padding:20px 24px;box-shadow:0 2px 12px rgba(0,0,0,.08);display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+    <span style="font-size:13px;font-weight:700;color:var(--gold-dark);letter-spacing:1px;text-transform:uppercase">Filtrer:</span>
+    <button class="filter-btn active" data-type="all">Toutes</button>
+    <button class="filter-btn" data-type="simple">Simple</button>
+    <button class="filter-btn" data-type="double">Double</button>
+    <button class="filter-btn" data-type="twin">Twin</button>
+    <button class="filter-btn" data-type="familiale">Familiale</button>
+    <button class="filter-btn" data-type="suite_junior">Suite Junior</button>
+    <button class="filter-btn" data-type="suite_presidentielle">Suite Présidentielle</button>
+    <div style="margin-left:auto;display:flex;gap:10px;align-items:center">
+      <label style="font-size:12px;color:var(--text-light)">Budget max:</label>
+      <input type="range" id="priceRange" min="30000" max="90000" step="5000" value="90000" style="width:120px">
+      <span id="priceLabel" style="font-size:13px;font-weight:700;color:var(--gold);white-space:nowrap">90 000 FCFA</span>
+    </div>
+  </div>
+</section>
+
+<style>
+.filter-btn { padding:8px 18px;border-radius:20px;border:1.5px solid #E8DCC8;background:white;cursor:pointer;font-size:13px;font-weight:600;color:var(--text-light);transition:.2s; }
+.filter-btn:hover,.filter-btn.active { background:var(--gold);color:white;border-color:var(--gold); }
+.room-detail-overlay { position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:2000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.3s; }
+.room-detail-overlay.open { opacity:1;pointer-events:auto; }
+.room-detail-box { background:white;border-radius:16px;max-width:700px;width:90%;max-height:90vh;overflow-y:auto;padding:40px;position:relative; }
+</style>
+
+<!-- GRILLE CHAMBRES -->
+<section>
+  <div class="rooms-grid" id="roomsGrid" style="max-width:1200px;margin:0 auto">
+    <!-- Chargé via JS depuis l'API -->
+    <p id="loadingMsg" style="text-align:center;color:var(--text-light);grid-column:1/-1">
+      <i class="fas fa-circle-notch fa-spin"></i> Chargement des chambres...
+    </p>
+  </div>
+</section>
+
+<!-- DETAIL MODAL -->
+<div class="room-detail-overlay" id="roomModal">
+  <div class="room-detail-box" id="roomModalContent">
+    <button onclick="closeRoomModal()" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:24px;cursor:pointer;color:var(--text-light)"><i class="fas fa-times"></i></button>
+    <div id="roomModalBody"></div>
+  </div>
+</div>
+
+<footer style="background:var(--dark);color:white;text-align:center;padding:30px">
+  <p style="color:rgba(255,255,255,.4);font-size:13px">© 2024 Hôtel Ricardo Ouagadougou</p>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+const API = 'http://localhost:3000/api';
+const ROOM_COLORS = { simple:'linear-gradient(135deg,#3D1F08,#6B3A1A)', double:'linear-gradient(135deg,#6B3A1A,#9A5C28)', twin:'linear-gradient(135deg,#4A3A2A,#6B5A4A)', familiale:'linear-gradient(135deg,#1A3A1A,#2D5A2D)', suite_junior:'linear-gradient(135deg,#2A1A3A,#4A2A6B)', suite_presidentielle:'linear-gradient(135deg,#1A1A1A,#3D3D1A)' };
+
+let allRooms = [];
+
+async function loadRooms() {
+  const params = new URLSearchParams(window.location.search);
+  try {
+    const r = await fetch(`${API}/rooms`);
+    allRooms = await r.json();
+    renderRooms(allRooms);
+  } catch {
+    document.getElementById('roomsGrid').innerHTML = '<p style="text-align:center;color:var(--text-light);grid-column:1/-1"><i class="fas fa-exclamation-triangle"></i> Impossible de charger les chambres. Vérifiez que le serveur backend est démarré.</p>';
+  }
+  // Pré-sélectionner type si paramètre URL
+  const type = params.get('type');
+  if (type) { document.querySelector(`[data-type="${type}"]`)?.click(); }
+}
+
+function renderRooms(rooms) {
+  const grid = document.getElementById('roomsGrid');
+  document.getElementById('loadingMsg')?.remove();
+  if (!rooms.length) { grid.innerHTML = '<p style="text-align:center;color:var(--text-light);grid-column:1/-1">Aucune chambre trouvée pour ces critères.</p>'; return; }
+  grid.innerHTML = rooms.map(room => `
+    <div class="room-card" data-type="${room.type}" data-price="${room.price}" data-aos>
+      <div class="room-card-image" style="background:${ROOM_COLORS[room.type]||'var(--brown)'}">
+        <div class="room-icon"><i class="fas fa-${room.type.includes('suite') ? 'star' : 'bed'}"></i></div>
+        <span class="room-badge">${formatType(room.type)}</span>
+      </div>
+      <div class="room-card-body">
+        <h3 class="room-card-title">${room.name}</h3>
+        <p class="room-card-desc">${room.description}</p>
+        <div class="room-meta">
+          <div class="room-meta-item"><i class="fas fa-users"></i> ${room.capacity} pers.</div>
+          <div class="room-meta-item"><i class="fas fa-expand-arrows-alt"></i> ${room.size||'–'}</div>
+          <div class="room-meta-item"><i class="fas fa-wifi"></i> WiFi</div>
+        </div>
+        <div class="room-amenities">
+          ${(room.amenities||[]).slice(0,4).map(a=>`<span class="amenity-tag">${a}</span>`).join('')}
+          ${room.amenities?.length>4?`<span class="amenity-tag">+${room.amenities.length-4}</span>`:''}
+        </div>
+        <div class="room-card-footer">
+          <div class="room-price">
+            <span class="amount">${Number(room.price).toLocaleString('fr-FR')}</span>
+            <span class="per-night">FCFA / nuit</span>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button onclick="openRoomModal(${room.id})" class="btn btn-sm" style="background:var(--cream);color:var(--brown);border:1px solid #E8DCC8"><i class="fas fa-eye"></i></button>
+            <a href="reservation.html?room=${room.id}" class="btn btn-primary btn-sm">Réserver</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  initAOS();
+}
+
+function formatType(t) {
+  const map = { simple:'Simple', double:'Double', twin:'Twin', familiale:'Familiale', suite_junior:'Suite Junior', suite_presidentielle:'Suite Présidentielle' };
+  return map[t] || t;
+}
+
+function openRoomModal(id) {
+  const room = allRooms.find(r => r.id === id);
+  if (!room) return;
+  document.getElementById('roomModalBody').innerHTML = `
+    <div style="height:200px;background:${ROOM_COLORS[room.type]};border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:24px">
+      <i class="fas fa-${room.type.includes('suite')?'star':'bed'}" style="font-size:60px;color:rgba(255,255,255,.3)"></i>
+    </div>
+    <span class="badge badge-warning">${formatType(room.type)}</span>
+    <h2 style="font-family:var(--font-serif);font-size:28px;color:var(--brown);margin:12px 0 8px">${room.name}</h2>
+    <p style="color:var(--text-light);margin-bottom:20px">${room.description}</p>
+    <div class="room-meta" style="margin-bottom:20px">
+      <div class="room-meta-item"><i class="fas fa-users"></i> ${room.capacity} personnes max</div>
+      <div class="room-meta-item"><i class="fas fa-expand-arrows-alt"></i> ${room.size||'–'}</div>
+    </div>
+    <h4 style="font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gold-dark);margin-bottom:12px">Équipements inclus</h4>
+    <div class="room-amenities" style="margin-bottom:24px">
+      ${(room.amenities||[]).map(a=>`<span class="amenity-tag"><i class="fas fa-check" style="color:var(--gold);margin-right:4px"></i>${a}</span>`).join('')}
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--cream);padding-top:20px">
+      <div><span style="font-family:var(--font-serif);font-size:32px;font-weight:700;color:var(--gold)">${Number(room.price).toLocaleString('fr-FR')}</span> <span style="color:var(--text-light);font-size:13px">FCFA / nuit</span></div>
+      <a href="reservation.html?room=${room.id}" class="btn btn-primary">Réserver cette chambre</a>
+    </div>
+  `;
+  document.getElementById('roomModal').classList.add('open');
+}
+function closeRoomModal() { document.getElementById('roomModal').classList.remove('open'); }
+document.getElementById('roomModal').addEventListener('click', e => { if(e.target === document.getElementById('roomModal')) closeRoomModal(); });
+
+// Filtres
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    filterRooms();
+  });
+});
+
+document.getElementById('priceRange').addEventListener('input', function() {
+  document.getElementById('priceLabel').textContent = Number(this.value).toLocaleString('fr-FR') + ' FCFA';
+  filterRooms();
+});
+
+function filterRooms() {
+  const type = document.querySelector('.filter-btn.active').dataset.type;
+  const maxPrice = Number(document.getElementById('priceRange').value);
+  const filtered = allRooms.filter(r => (type === 'all' || r.type === type) && r.price <= maxPrice);
+  renderRooms(filtered);
+}
+
+loadRooms();
+</script>
+</body>
+</html>

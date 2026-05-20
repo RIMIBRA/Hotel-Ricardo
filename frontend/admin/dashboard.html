@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Admin Hôtel Ricardo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-icon"><i class="fas fa-crown"></i></div>
+    <div class="brand-text">
+      <div class="hotel-name">HÔTEL RICARDO</div>
+      <div class="hotel-sub">Administration</div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Principal</div>
+    <a href="dashboard.html" class="nav-item active"><i class="fas fa-th-large"></i> Tableau de bord</a>
+    <a href="reservations.html" class="nav-item"><i class="fas fa-calendar-check"></i> Réservations <span class="badge" id="pendingBadge">0</span></a>
+    <a href="paiements.html" class="nav-item"><i class="fas fa-credit-card"></i> Paiements</a>
+    <div class="nav-section-label">Gestion</div>
+    <a href="chambres.html" class="nav-item"><i class="fas fa-bed"></i> Chambres</a>
+    <a href="messages.html" class="nav-item"><i class="fas fa-envelope"></i> Messages <span class="badge" id="msgBadge">0</span></a>
+    <div class="nav-section-label">Accès</div>
+    <a href="../index.html" class="nav-item" target="_blank"><i class="fas fa-globe"></i> Voir le site</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="user-avatar">A</div>
+      <div class="user-info">
+        <div class="user-name">Administrateur</div>
+        <div class="user-role">Super Admin</div>
+      </div>
+      <button class="btn-logout" onclick="logout()" title="Déconnexion"><i class="fas fa-sign-out-alt"></i></button>
+    </div>
+  </div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<div class="main-content">
+  <div class="topbar">
+    <div class="topbar-title">
+      <h1>Tableau de Bord</h1>
+      <p id="todayDate">Chargement...</p>
+    </div>
+    <div class="topbar-actions">
+      <a href="../reservation.html" target="_blank" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Nouvelle réservation</a>
+      <button class="topbar-notif" onclick="window.location='messages.html'"><i class="fas fa-bell"></i><span class="notif-dot" id="notifDot" style="display:none"></span></button>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card" style="border-left-color:var(--gold)">
+        <div class="stat-icon gold"><i class="fas fa-calendar-check"></i></div>
+        <div><div class="stat-value" id="totalRes">–</div><div class="stat-label">Réservations totales</div></div>
+      </div>
+      <div class="stat-card" style="border-left-color:var(--success)">
+        <div class="stat-icon green"><i class="fas fa-money-bill-wave"></i></div>
+        <div><div class="stat-value" id="totalRev">–</div><div class="stat-label">Revenus totaux</div></div>
+      </div>
+      <div class="stat-card" style="border-left-color:var(--info)">
+        <div class="stat-icon blue"><i class="fas fa-hourglass-half"></i></div>
+        <div><div class="stat-value" id="pendingRes">–</div><div class="stat-label">En attente</div></div>
+      </div>
+      <div class="stat-card" style="border-left-color:var(--danger)">
+        <div class="stat-icon gold"><i class="fas fa-bed"></i></div>
+        <div><div class="stat-value" id="totalRooms">–</div><div class="stat-label">Chambres actives</div></div>
+      </div>
+    </div>
+
+    <!-- AUJOURD'HUI -->
+    <div class="grid-2" style="margin-bottom:24px">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title"><i class="fas fa-sun"></i> Aujourd'hui</span>
+        </div>
+        <div class="card-body">
+          <div class="today-grid">
+            <div class="today-card">
+              <div class="label"><i class="fas fa-sign-in-alt"></i> Arrivées</div>
+              <div class="value" id="todayIn">–</div>
+            </div>
+            <div class="today-card">
+              <div class="label"><i class="fas fa-sign-out-alt"></i> Départs</div>
+              <div class="value" id="todayOut">–</div>
+            </div>
+            <div class="today-card">
+              <div class="label"><i class="fas fa-envelope"></i> Messages</div>
+              <div class="value" id="unreadMsg">–</div>
+            </div>
+            <div class="today-card">
+              <div class="label"><i class="fas fa-check-circle"></i> Confirmées</div>
+              <div class="value" id="confirmedRes">–</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REVENUS PAR MÉTHODE -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title"><i class="fas fa-chart-pie"></i> Paiements par méthode</span>
+        </div>
+        <div class="card-body" style="display:flex;align-items:center;gap:20px">
+          <div style="flex:0 0 160px;height:160px"><canvas id="payChart"></canvas></div>
+          <div id="payLegend" style="flex:1;font-size:12px"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRAPHIQUE 7 JOURS -->
+    <div class="card" style="margin-bottom:24px">
+      <div class="card-header">
+        <span class="card-title"><i class="fas fa-chart-bar"></i> Réservations — 7 derniers jours</span>
+      </div>
+      <div class="card-body"><canvas id="revenueChart" height="80"></canvas></div>
+    </div>
+
+    <!-- RÉSERVATIONS RÉCENTES -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title"><i class="fas fa-clock"></i> Réservations récentes</span>
+        <a href="reservations.html" class="btn btn-secondary btn-sm">Voir tout</a>
+      </div>
+      <div class="card-body" style="padding:0">
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Référence</th><th>Client</th><th>Chambre</th>
+                <th>Arrivée</th><th>Montant</th><th>Statut</th><th>Paiement</th><th></th>
+              </tr>
+            </thead>
+            <tbody id="recentResTable"><tr><td colspan="8" style="text-align:center;padding:30px;color:#7A6A5A">Chargement...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- OCCUPATION CHAMBRES -->
+    <div class="card" style="margin-top:24px">
+      <div class="card-header">
+        <span class="card-title"><i class="fas fa-bed"></i> Occupation par chambre</span>
+      </div>
+      <div class="card-body" style="padding:0">
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Chambre</th><th>Type</th><th>Prix/nuit</th><th>Réservations</th><th>Nuits vendues</th><th>Taux</th></tr></thead>
+            <tbody id="occupancyTable"><tr><td colspan="6" style="text-align:center;padding:30px;color:#7A6A5A">Chargement...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/admin.js"></script>
+<script>
+checkAuth();
+
+document.getElementById('todayDate').textContent = new Date().toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+
+async function loadDashboard() {
+  let data = DEMO_STATS;
+  try {
+    const r = await apiFetch('/dashboard/stats');
+    if (r && r.ok) data = await r.json();
+  } catch {}
+
+  const s = data.stats;
+  document.getElementById('totalRes').textContent = s.totalReservations;
+  document.getElementById('totalRev').textContent = (s.totalRevenue / 1000000).toFixed(1) + 'M';
+  document.getElementById('pendingRes').textContent = s.pendingReservations;
+  document.getElementById('totalRooms').textContent = s.totalRooms;
+  document.getElementById('todayIn').textContent = s.todayCheckins;
+  document.getElementById('todayOut').textContent = s.todayCheckouts;
+  document.getElementById('unreadMsg').textContent = s.unreadMessages;
+  document.getElementById('confirmedRes').textContent = s.confirmedReservations;
+
+  if (s.pendingReservations > 0) document.getElementById('pendingBadge').textContent = s.pendingReservations;
+  if (s.unreadMessages > 0) { document.getElementById('msgBadge').textContent = s.unreadMessages; document.getElementById('notifDot').style.display = 'block'; }
+
+  // Graphique paiements (donut)
+  const methods = data.revenueByMethod;
+  const colors = { orange_money:'#FF6600', moov_money:'#0066CC', telecel_money:'#CC0000', coris_money:'#006633', stripe:'#1A1F71', paypal:'#003087' };
+  const labels = { orange_money:'Orange Money', moov_money:'Moov Money', telecel_money:'Telecel Money', coris_money:'Coris Money', stripe:'Carte bancaire', paypal:'PayPal' };
+  new Chart(document.getElementById('payChart'), {
+    type: 'doughnut',
+    data: { labels: methods.map(m => labels[m.method]||m.method), datasets: [{ data: methods.map(m => m.total), backgroundColor: methods.map(m => colors[m.method]||'#ccc'), borderWidth: 0 }] },
+    options: { plugins: { legend: { display: false } }, cutout: '70%' }
+  });
+  document.getElementById('payLegend').innerHTML = methods.map(m =>
+    `<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+      <span style="width:10px;height:10px;border-radius:50%;background:${colors[m.method]||'#ccc'};flex-shrink:0"></span>
+      <span style="color:#7A6A5A">${labels[m.method]||m.method}</span>
+      <span style="margin-left:auto;font-weight:700">${(m.total/1000).toFixed(0)}k</span>
+    </div>`
+  ).join('');
+
+  // Graphique 7 jours (bar)
+  const days = data.last7days;
+  new Chart(document.getElementById('revenueChart'), {
+    type: 'bar',
+    data: {
+      labels: days.map(d => new Date(d.date).toLocaleDateString('fr-FR', { weekday:'short', day:'numeric' })),
+      datasets: [
+        { label: 'Revenus (FCFA)', data: days.map(d => d.revenue), backgroundColor: 'rgba(201,146,10,.7)', borderRadius: 6, yAxisID: 'y1' },
+        { label: 'Réservations', data: days.map(d => d.reservations), type: 'line', borderColor: '#3D1F08', backgroundColor: 'rgba(61,31,8,.1)', tension: .4, yAxisID: 'y2', pointBackgroundColor: '#3D1F08' }
+      ]
+    },
+    options: { responsive: true, plugins: { legend: { position: 'top' } }, scales: { y1: { type:'linear', position:'left', ticks: { callback: v => (v/1000)+'k' } }, y2: { type:'linear', position:'right', grid: { drawOnChartArea: false } } } }
+  });
+
+  // Réservations récentes
+  document.getElementById('recentResTable').innerHTML = data.recentReservations.map(r => `
+    <tr>
+      <td><strong style="color:var(--brown)">${r.reference}</strong></td>
+      <td>${r.client_name}</td>
+      <td>${r.room_name}</td>
+      <td>${formatDate(r.check_in)}</td>
+      <td style="font-weight:700;color:var(--gold)">${formatCFA(r.total_price)}</td>
+      <td>${badgeStatus(r.status)}</td>
+      <td>${badgeStatus(r.payment_status)}</td>
+      <td><a href="reservations.html" class="btn btn-secondary btn-sm btn-icon"><i class="fas fa-eye"></i></a></td>
+    </tr>
+  `).join('');
+
+  // Occupation chambres
+  document.getElementById('occupancyTable').innerHTML = data.roomOccupancy.map(r => {
+    const rate = Math.min(100, Math.round((r.nights_booked / 30) * 100));
+    return `<tr>
+      <td><strong>${r.name}</strong></td>
+      <td><span class="badge badge-info">${r.type}</span></td>
+      <td>${formatCFA(r.price)}</td>
+      <td>${r.total_reservations}</td>
+      <td>${r.nights_booked} nuits</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="flex:1;height:6px;background:#E8DCC8;border-radius:3px;overflow:hidden"><div style="height:100%;width:${rate}%;background:var(--gold);border-radius:3px"></div></div>
+          <span style="font-size:12px;font-weight:700;width:30px">${rate}%</span>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+loadDashboard();
+</script>
+</body>
+</html>

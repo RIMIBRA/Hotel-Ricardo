@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Réservations — Admin Hôtel Ricardo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-icon"><i class="fas fa-crown"></i></div>
+    <div class="brand-text"><div class="hotel-name">HÔTEL RICARDO</div><div class="hotel-sub">Administration</div></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Principal</div>
+    <a href="dashboard.html" class="nav-item"><i class="fas fa-th-large"></i> Tableau de bord</a>
+    <a href="reservations.html" class="nav-item active"><i class="fas fa-calendar-check"></i> Réservations</a>
+    <a href="paiements.html" class="nav-item"><i class="fas fa-credit-card"></i> Paiements</a>
+    <div class="nav-section-label">Gestion</div>
+    <a href="chambres.html" class="nav-item"><i class="fas fa-bed"></i> Chambres</a>
+    <a href="messages.html" class="nav-item"><i class="fas fa-envelope"></i> Messages</a>
+    <div class="nav-section-label">Accès</div>
+    <a href="../index.html" class="nav-item" target="_blank"><i class="fas fa-globe"></i> Voir le site</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="user-avatar">A</div>
+      <div class="user-info"><div class="user-name">Administrateur</div><div class="user-role">Super Admin</div></div>
+      <button class="btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
+    </div>
+  </div>
+</aside>
+
+<div class="main-content">
+  <div class="topbar">
+    <div class="topbar-title"><h1>Réservations</h1><p>Gestion de toutes les réservations</p></div>
+    <div class="topbar-actions">
+      <span id="totalCount" style="font-size:13px;color:#7A6A5A"></span>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- FILTRES -->
+    <div class="card" style="margin-bottom:20px">
+      <div class="card-body" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <input type="text" class="search-input" id="searchInput" placeholder="Rechercher (nom, email, référence)..." oninput="filterReservations()">
+        <select class="filter-select" id="statusFilter" onchange="filterReservations()">
+          <option value="">Tous les statuts</option>
+          <option value="en_attente">En attente</option>
+          <option value="confirmee">Confirmée</option>
+          <option value="annulee">Annulée</option>
+          <option value="terminee">Terminée</option>
+        </select>
+        <select class="filter-select" id="payFilter" onchange="filterReservations()">
+          <option value="">Tout paiement</option>
+          <option value="paye">Payé</option>
+          <option value="non_paye">Non payé</option>
+        </select>
+        <button onclick="loadReservations()" class="btn btn-secondary btn-sm"><i class="fas fa-sync"></i> Actualiser</button>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="card">
+      <div class="card-body" style="padding:0">
+        <div class="table-wrapper">
+          <table id="resTable">
+            <thead>
+              <tr>
+                <th>Réf.</th><th>Client</th><th>Chambre</th><th>Arrivée</th>
+                <th>Départ</th><th>Nuits</th><th>Montant</th><th>Statut</th><th>Paiement</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="resTableBody"><tr><td colspan="10" style="text-align:center;padding:40px;color:#7A6A5A"><i class="fas fa-circle-notch fa-spin"></i> Chargement...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DÉTAIL -->
+<div class="modal" id="detailModal">
+  <div style="position:absolute;inset:0" onclick="closeModal('detailModal')"></div>
+  <div class="modal-box" style="max-width:640px">
+    <div class="modal-header">
+      <h3 class="modal-title">Détail de la réservation</h3>
+      <button class="modal-close" onclick="closeModal('detailModal')"><i class="fas fa-times"></i></button>
+    </div>
+    <div id="detailContent"></div>
+  </div>
+</div>
+
+<script src="js/admin.js"></script>
+<script>
+checkAuth();
+let allReservations = [];
+
+const DEMO_RESERVATIONS = [
+  { id:1, reference:'RIC-2605-1234', client_name:'Aminata Traoré', client_email:'aminata@email.com', client_phone:'+226 70112233', room_name:'Chambre Double', room_type:'double', check_in:'2026-05-22', check_out:'2026-05-24', guests:2, nights:2, room_price:37000, total_price:74000, breakfast:0, status:'confirmee', payment_status:'paye', created_at:'2026-05-20T10:22:00', special_requests:'Vue piscine si possible' },
+  { id:2, reference:'RIC-2605-5678', client_name:'Jean-Pierre Ouédraogo', client_email:'jp@email.com', client_phone:'+226 76556677', room_name:'Suite Junior', room_type:'suite_junior', check_in:'2026-05-21', check_out:'2026-05-23', guests:2, nights:2, room_price:65000, total_price:130000, breakfast:1, status:'en_attente', payment_status:'non_paye', created_at:'2026-05-20T08:45:00', special_requests:'' },
+  { id:3, reference:'RIC-2605-9012', client_name:'Marie Dupont', client_email:'marie@email.com', client_phone:'+33 612345678', room_name:'Suite Présidentielle', room_type:'suite_presidentielle', check_in:'2026-05-25', check_out:'2026-05-28', guests:3, nights:3, room_price:85000, total_price:255000, breakfast:0, status:'confirmee', payment_status:'paye', created_at:'2026-05-19T16:30:00', special_requests:'Fruits et champagne à l\'arrivée' },
+  { id:4, reference:'RIC-2605-3456', client_name:'Kofi Mensah', client_email:'kofi@email.com', client_phone:'+233 244112233', room_name:'Chambre Simple', room_type:'simple', check_in:'2026-05-20', check_out:'2026-05-21', guests:1, nights:1, room_price:32000, total_price:32000, breakfast:0, status:'terminee', payment_status:'paye', created_at:'2026-05-18T14:10:00', special_requests:'' },
+  { id:5, reference:'RIC-2605-7890', client_name:'Fatou Diallo', client_email:'fatou@email.com', client_phone:'+226 65998877', room_name:'Chambre Familiale', room_type:'familiale', check_in:'2026-05-28', check_out:'2026-06-01', guests:4, nights:4, room_price:52000, total_price:208000, breakfast:0, status:'en_attente', payment_status:'non_paye', created_at:'2026-05-20T11:55:00', special_requests:'Lit bébé svp' }
+];
+
+async function loadReservations() {
+  allReservations = DEMO_RESERVATIONS;
+  try {
+    const r = await apiFetch('/reservations');
+    if (r && r.ok) allReservations = await r.json();
+  } catch {}
+  document.getElementById('totalCount').textContent = `${allReservations.length} réservation(s)`;
+  renderTable(allReservations);
+}
+
+function renderTable(reservations) {
+  const tbody = document.getElementById('resTableBody');
+  if (!reservations.length) {
+    tbody.innerHTML = '<tr><td colspan="10"><div class="empty-state"><i class="fas fa-calendar-times"></i><h3>Aucune réservation trouvée</h3></div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = reservations.map(r => `
+    <tr>
+      <td><strong style="color:var(--brown);font-size:12px">${r.reference}</strong></td>
+      <td><div style="font-weight:600">${r.client_name}</div><div style="font-size:11px;color:#7A6A5A">${r.client_email}</div></td>
+      <td>${r.room_name}</td>
+      <td>${formatDate(r.check_in)}</td>
+      <td>${formatDate(r.check_out)}</td>
+      <td style="text-align:center">${r.nights}</td>
+      <td style="font-weight:700;color:var(--gold)">${formatCFA(r.total_price)}</td>
+      <td>${badgeStatus(r.status)}</td>
+      <td>${badgeStatus(r.payment_status)}</td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="btn btn-secondary btn-sm btn-icon" onclick="showDetail(${r.id})" title="Détails"><i class="fas fa-eye"></i></button>
+          ${r.status === 'en_attente' ? `<button class="btn btn-success btn-sm btn-icon" onclick="updateStatus(${r.id},'confirmee')" title="Confirmer"><i class="fas fa-check"></i></button>` : ''}
+          ${r.status !== 'annulee' && r.status !== 'terminee' ? `<button class="btn btn-danger btn-sm btn-icon" onclick="updateStatus(${r.id},'annulee')" title="Annuler"><i class="fas fa-times"></i></button>` : ''}
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function filterReservations() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const status = document.getElementById('statusFilter').value;
+  const pay = document.getElementById('payFilter').value;
+  const filtered = allReservations.filter(r =>
+    (!search || r.client_name.toLowerCase().includes(search) || r.client_email.toLowerCase().includes(search) || r.reference.toLowerCase().includes(search)) &&
+    (!status || r.status === status) &&
+    (!pay || r.payment_status === pay)
+  );
+  document.getElementById('totalCount').textContent = `${filtered.length} réservation(s)`;
+  renderTable(filtered);
+}
+
+function showDetail(id) {
+  const r = allReservations.find(x => x.id === id);
+  if (!r) return;
+  document.getElementById('detailContent').innerHTML = `
+    <div style="background:var(--cream-light);border-radius:8px;padding:16px;margin-bottom:20px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px">
+        <div><span style="color:#7A6A5A">Référence:</span> <strong>${r.reference}</strong></div>
+        <div><span style="color:#7A6A5A">Créée le:</span> <strong>${formatDateTime(r.created_at)}</strong></div>
+        <div><span style="color:#7A6A5A">Client:</span> <strong>${r.client_name}</strong></div>
+        <div><span style="color:#7A6A5A">Téléphone:</span> <strong>${r.client_phone}</strong></div>
+        <div><span style="color:#7A6A5A">Email:</span> <strong>${r.client_email}</strong></div>
+        <div><span style="color:#7A6A5A">Personnes:</span> <strong>${r.guests}</strong></div>
+      </div>
+    </div>
+    <div style="background:var(--cream-light);border-radius:8px;padding:16px;margin-bottom:20px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px">
+        <div><span style="color:#7A6A5A">Chambre:</span> <strong>${r.room_name}</strong></div>
+        <div><span style="color:#7A6A5A">Nuits:</span> <strong>${r.nights}</strong></div>
+        <div><span style="color:#7A6A5A">Arrivée:</span> <strong>${formatDate(r.check_in)}</strong></div>
+        <div><span style="color:#7A6A5A">Départ:</span> <strong>${formatDate(r.check_out)}</strong></div>
+        <div><span style="color:#7A6A5A">Prix/nuit:</span> <strong>${formatCFA(r.room_price)}</strong></div>
+        <div><span style="color:#7A6A5A">Total:</span> <strong style="color:var(--gold)">${formatCFA(r.total_price)}</strong></div>
+      </div>
+    </div>
+    ${r.special_requests ? `<div style="background:#FFF3E0;border-left:3px solid var(--gold);padding:12px;border-radius:0 8px 8px 0;font-size:13px;margin-bottom:16px"><strong>Demandes spéciales:</strong> ${r.special_requests}</div>` : ''}
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px">
+      <span>Statut:</span> ${badgeStatus(r.status)}
+      <span>Paiement:</span> ${badgeStatus(r.payment_status)}
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      ${r.status === 'en_attente' ? `<button onclick="updateStatus(${r.id},'confirmee');closeModal('detailModal')" class="btn btn-success btn-sm"><i class="fas fa-check"></i> Confirmer</button>` : ''}
+      ${r.status !== 'annulee' && r.status !== 'terminee' ? `<button onclick="updateStatus(${r.id},'annulee');closeModal('detailModal')" class="btn btn-danger btn-sm"><i class="fas fa-times"></i> Annuler</button>` : ''}
+      <button onclick="updateStatus(${r.id},'terminee');closeModal('detailModal')" class="btn btn-secondary btn-sm"><i class="fas fa-flag-checkered"></i> Marquer terminée</button>
+    </div>
+  `;
+  openModal('detailModal');
+}
+
+async function updateStatus(id, status) {
+  try {
+    const r = await apiFetch(`/reservations/${id}/status`, { method:'PUT', body: JSON.stringify({ status }) });
+    if (r && r.ok) {
+      const res = allReservations.find(x => x.id === id);
+      if (res) res.status = status;
+      renderTable(allReservations);
+      return;
+    }
+  } catch {}
+  // Mode démo
+  const res = allReservations.find(x => x.id === id);
+  if (res) { res.status = status; filterReservations(); }
+}
+
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+loadReservations();
+</script>
+</body>
+</html>

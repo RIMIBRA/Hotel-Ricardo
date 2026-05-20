@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hôtel Ricardo Ouagadougou — Luxe & Authenticité Africaine</title>
+  <meta name="description" content="L'Hôtel Ricardo à Ouagadougou, Burkina Faso. Réservez vos chambres en ligne. Paiement Orange Money, Moov Money, Telecel Money, Visa & PayPal.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .hero { background-image: linear-gradient(160deg, rgba(28,18,8,.8) 0%, rgba(61,31,8,.5) 60%, rgba(201,146,10,.15) 100%), url('images/hero-placeholder.jpg'); }
+    .hero-placeholder-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, #3D1F08 0%, #6B3A1A 30%, #1A3A1A 60%, #C9920A 100%);
+      z-index: -1;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAVBAR ══ -->
+<nav class="navbar transparent" id="navbar">
+  <a href="index.html" class="navbar-logo">
+    <div class="logo-icon"><i class="fas fa-crown"></i></div>
+    <div class="logo-text">
+      <span class="hotel-name">HÔTEL RICARDO</span>
+      <span class="hotel-city">OUAGADOUGOU</span>
+    </div>
+  </a>
+  <ul class="navbar-menu" id="navMenu">
+    <li><a href="index.html" class="active">Accueil</a></li>
+    <li><a href="chambres.html">Chambres</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="reservation.html" class="btn-reserve">Réserver</a></li>
+  </ul>
+  <button class="navbar-toggle" id="navToggle" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero" id="hero">
+  <div class="hero-placeholder-bg"></div>
+  <div class="hero-badge">★ Hôtel Classé — Ouagadougou, Burkina Faso</div>
+  <h1 class="hero-title">
+    L'Élégance Africaine
+    <span>au Cœur de Ouaga</span>
+  </h1>
+  <p class="hero-subtitle">Vivez une expérience unique mêlant authenticité africaine et confort moderne, à 10 minutes de l'aéroport.</p>
+  <div class="hero-actions">
+    <a href="reservation.html" class="btn btn-primary btn-lg">
+      <i class="fas fa-calendar-check"></i> Réserver Maintenant
+    </a>
+    <a href="chambres.html" class="btn btn-outline btn-lg">
+      <i class="fas fa-bed"></i> Nos Chambres
+    </a>
+  </div>
+  <div class="hero-scroll">DÉFILER</div>
+</section>
+
+<!-- ══ SEARCH BAR ══ -->
+<div class="search-bar" style="margin: -60px 5% 60px;">
+  <form id="searchForm" action="chambres.html" method="get">
+    <div class="search-field">
+      <label><i class="fas fa-sign-in-alt"></i> Arrivée</label>
+      <input type="date" name="check_in" id="checkIn" required>
+    </div>
+    <div class="search-field">
+      <label><i class="fas fa-sign-out-alt"></i> Départ</label>
+      <input type="date" name="check_out" id="checkOut" required>
+    </div>
+    <div class="search-field">
+      <label><i class="fas fa-users"></i> Personnes</label>
+      <select name="guests">
+        <option value="1">1 Personne</option>
+        <option value="2" selected>2 Personnes</option>
+        <option value="3">3 Personnes</option>
+        <option value="4">4 Personnes</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">
+      <i class="fas fa-search"></i> Rechercher
+    </button>
+  </form>
+</div>
+
+<!-- ══ ROOMS PREVIEW ══ -->
+<section id="rooms-preview">
+  <div class="section-header">
+    <span class="section-tag">Nos Hébergements</span>
+    <h2 class="section-title">Chambres & Suites</h2>
+    <div class="section-line"></div>
+    <p class="section-desc">20 chambres décorées d'œuvres d'art africaines authentiques, chacune offrant confort et caractère unique.</p>
+  </div>
+  <div class="rooms-grid" id="roomsPreview">
+    <!-- Chargé via JS -->
+    <div class="room-card" data-aos>
+      <div class="room-card-image">
+        <div class="room-icon"><i class="fas fa-bed"></i></div>
+        <span class="room-badge">Simple</span>
+      </div>
+      <div class="room-card-body">
+        <h3 class="room-card-title">Chambre Simple</h3>
+        <p class="room-card-desc">Chambre confortable avec décoration africaine. Vue sur le jardin tropical.</p>
+        <div class="room-meta">
+          <div class="room-meta-item"><i class="fas fa-user"></i> 1 Personne</div>
+          <div class="room-meta-item"><i class="fas fa-expand-arrows-alt"></i> 18 m²</div>
+          <div class="room-meta-item"><i class="fas fa-wifi"></i> WiFi</div>
+        </div>
+        <div class="room-amenities">
+          <span class="amenity-tag">Climatisation</span>
+          <span class="amenity-tag">TV HD</span>
+          <span class="amenity-tag">Salle de bain</span>
+        </div>
+        <div class="room-card-footer">
+          <div class="room-price">
+            <span class="amount">32 000</span>
+            <span class="per-night">FCFA / nuit</span>
+          </div>
+          <a href="reservation.html?room=1" class="btn btn-primary btn-sm">Réserver</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="room-card" data-aos>
+      <div class="room-card-image" style="background: linear-gradient(135deg,#6B3A1A,#3D1F08)">
+        <div class="room-icon"><i class="fas fa-bed"></i></div>
+        <span class="room-badge">Double</span>
+      </div>
+      <div class="room-card-body">
+        <h3 class="room-card-title">Chambre Double</h3>
+        <p class="room-card-desc">Grand lit double avec décoration africaine raffinée. Vue jardin ou piscine.</p>
+        <div class="room-meta">
+          <div class="room-meta-item"><i class="fas fa-users"></i> 2 Personnes</div>
+          <div class="room-meta-item"><i class="fas fa-expand-arrows-alt"></i> 24 m²</div>
+          <div class="room-meta-item"><i class="fas fa-swimming-pool"></i> Piscine</div>
+        </div>
+        <div class="room-amenities">
+          <span class="amenity-tag">Climatisation</span>
+          <span class="amenity-tag">Mini-bar</span>
+          <span class="amenity-tag">Terrasse</span>
+        </div>
+        <div class="room-card-footer">
+          <div class="room-price">
+            <span class="amount">37 000</span>
+            <span class="per-night">FCFA / nuit</span>
+          </div>
+          <a href="reservation.html?room=2" class="btn btn-primary btn-sm">Réserver</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="room-card" data-aos>
+      <div class="room-card-image" style="background: linear-gradient(135deg,#1A3A1A,#2D5A2D)">
+        <div class="room-icon"><i class="fas fa-star"></i></div>
+        <span class="room-badge" style="background:var(--green)">Suite Présidentielle</span>
+      </div>
+      <div class="room-card-body">
+        <h3 class="room-card-title">Suite Présidentielle</h3>
+        <p class="room-card-desc">Le summum du luxe. Salon, salle à manger, jacuzzi et grande terrasse panoramique.</p>
+        <div class="room-meta">
+          <div class="room-meta-item"><i class="fas fa-users"></i> 4 Personnes</div>
+          <div class="room-meta-item"><i class="fas fa-expand-arrows-alt"></i> 80 m²</div>
+          <div class="room-meta-item"><i class="fas fa-concierge-bell"></i> Butler</div>
+        </div>
+        <div class="room-amenities">
+          <span class="amenity-tag">Jacuzzi</span>
+          <span class="amenity-tag">Kitchenette</span>
+          <span class="amenity-tag">TV 65"</span>
+        </div>
+        <div class="room-card-footer">
+          <div class="room-price">
+            <span class="amount">85 000</span>
+            <span class="per-night">FCFA / nuit</span>
+          </div>
+          <a href="reservation.html?room=6" class="btn btn-primary btn-sm">Réserver</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:40px">
+    <a href="chambres.html" class="btn btn-dark btn-lg"><i class="fas fa-th-list"></i> Voir Toutes les Chambres</a>
+  </div>
+</section>
+
+<!-- ══ ABOUT ══ -->
+<section style="background:var(--cream);padding:90px 5%">
+  <div class="about-grid">
+    <div class="about-image-wrapper" data-aos>
+      <div class="about-image-main" style="background:linear-gradient(135deg,#3D1F08,#6B3A1A,#1A3A1A);min-height:300px;display:flex;align-items:center;justify-content:center">
+        <div style="text-align:center;color:rgba(255,255,255,.5)">
+          <i class="fas fa-camera" style="font-size:48px;margin-bottom:12px;display:block"></i>
+          <span style="font-size:13px">Photo Hôtel Ricardo</span>
+        </div>
+      </div>
+      <div class="about-badge-float">
+        <div class="years">20+</div>
+        <div class="label">Ans d'Excellence</div>
+      </div>
+    </div>
+    <div class="about-content">
+      <div class="section-header">
+        <span class="section-tag">Notre Histoire</span>
+        <h2 class="section-title">Un Hôtel Familial au Cœur de l'Afrique</h2>
+        <div class="section-line"></div>
+      </div>
+      <p>Fondé par une famille passionnée d'Afrique, l'Hôtel Ricardo est devenu une référence d'hospitalité à Ouagadougou. Son décor unique, inspiré du film "Out of Africa", mêle trophées de chasse, sculptures africaines et mobilier colonial pour créer une atmosphère incomparable.</p>
+      <p>Situé à seulement 10 minutes de l'aéroport international de Ouagadougou, l'hôtel offre un cadre idéal pour les voyageurs d'affaires et de loisirs qui souhaitent vivre une expérience authentiquement africaine.</p>
+      <div class="about-stats">
+        <div class="about-stat"><div class="number">20</div><div class="label">Chambres</div></div>
+        <div class="about-stat"><div class="number">25m</div><div class="label">Piscine</div></div>
+        <div class="about-stat"><div class="number">4.1★</div><div class="label">TripAdvisor</div></div>
+      </div>
+      <a href="services.html" class="btn btn-primary">
+        <i class="fas fa-spa"></i> Découvrir nos services
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SERVICES ══ -->
+<section>
+  <div class="section-header">
+    <span class="section-tag">Équipements & Services</span>
+    <h2 class="section-title">Tout Pour Votre Confort</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="services-grid">
+    <div class="service-card" data-aos>
+      <div class="service-icon"><i class="fas fa-swimming-pool"></i></div>
+      <h3 class="service-name">Piscine 25m</h3>
+      <p class="service-desc">Piscine extérieure avec solarium et bar à la piscine</p>
+    </div>
+    <div class="service-card" data-aos>
+      <div class="service-icon"><i class="fas fa-utensils"></i></div>
+      <h3 class="service-name">Restaurant</h3>
+      <p class="service-desc">Cuisine franco-africaine raffinée, produits frais locaux</p>
+    </div>
+    <div class="service-card" data-aos>
+      <div class="service-icon"><i class="fas fa-cocktail"></i></div>
+      <h3 class="service-name">Bar Lounge</h3>
+      <p class="service-desc">Bar bien fourni, cocktails africains et vins sélectionnés</p>
+    </div>
+    <div class="service-card" data-aos>
+      <div class="service-icon"><i class="fas fa-wifi"></i></div>
+      <h3 class="service-name">WiFi Gratuit</h3>
+      <p class="service-desc">Connexion haut débit dans tout l'établissement</p>
+    </div>
+    <div class="service-card" data-aos>
+      <div class="service-icon"><i class="fas fa-car"></i></div>
+      <h3 class="service-name">Parking Gardé</h3>
+      <p class="service-desc">Parking sécurisé et gardienné 24h/24</p>
+    </div>
+    <div class="service-card" data-aos>
+      <div class="service-icon"><i class="fas fa-plane"></i></div>
+      <h3 class="service-name">Navette Aéroport</h3>
+      <p class="service-desc">Service de transfert vers/depuis l'aéroport sur réservation</p>
+    </div>
+    <div class="service-card" data-aos>
+      <div class="service-icon"><i class="fas fa-leaf"></i></div>
+      <h3 class="service-name">Jardin Tropical</h3>
+      <p class="service-desc">Jardin luxuriant avec terrasse ombragée pour se détendre</p>
+    </div>
+    <div class="service-card" data-aos>
+      <div class="service-icon"><i class="fas fa-concierge-bell"></i></div>
+      <h3 class="service-name">Service 24h/24</h3>
+      <p class="service-desc">Réception et conciergerie disponibles toute la nuit</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PAYMENT SECTION ══ -->
+<section style="background:var(--cream);padding:70px 5%">
+  <div class="section-header">
+    <span class="section-tag">Moyens de Paiement</span>
+    <h2 class="section-title">Payez Comme Vous Voulez</h2>
+    <div class="section-line"></div>
+    <p class="section-desc">Nous acceptons tous les modes de paiement locaux et internationaux pour votre confort.</p>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:16px;max-width:800px;margin:0 auto">
+    <div style="background:white;border-radius:12px;padding:20px 28px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.08);min-width:130px">
+      <div style="font-size:28px;margin-bottom:8px">🟠</div>
+      <div style="font-weight:700;font-size:13px;color:#FF6600">Orange Money</div>
+      <div style="font-size:11px;color:#999">*144#</div>
+    </div>
+    <div style="background:white;border-radius:12px;padding:20px 28px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.08);min-width:130px">
+      <div style="font-size:28px;margin-bottom:8px">🔵</div>
+      <div style="font-weight:700;font-size:13px;color:#0066CC">Moov Money</div>
+      <div style="font-size:11px;color:#999">*555#</div>
+    </div>
+    <div style="background:white;border-radius:12px;padding:20px 28px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.08);min-width:130px">
+      <div style="font-size:28px;margin-bottom:8px">🔴</div>
+      <div style="font-weight:700;font-size:13px;color:#CC0000">Telecel Money</div>
+      <div style="font-size:11px;color:#999">*808#</div>
+    </div>
+    <div style="background:white;border-radius:12px;padding:20px 28px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.08);min-width:130px">
+      <div style="font-size:28px;margin-bottom:8px">💚</div>
+      <div style="font-weight:700;font-size:13px;color:#006633">Coris Money</div>
+      <div style="font-size:11px;color:#999">App mobile</div>
+    </div>
+    <div style="background:white;border-radius:12px;padding:20px 28px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.08);min-width:130px">
+      <div style="font-size:28px;margin-bottom:8px">💳</div>
+      <div style="font-weight:700;font-size:13px;color:#1A1F71">Visa / Mastercard</div>
+      <div style="font-size:11px;color:#999">International</div>
+    </div>
+    <div style="background:white;border-radius:12px;padding:20px 28px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.08);min-width:130px">
+      <div style="font-size:28px;margin-bottom:8px">🅿️</div>
+      <div style="font-weight:700;font-size:13px;color:#003087">PayPal</div>
+      <div style="font-size:11px;color:#999">International</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TESTIMONIALS ══ -->
+<section class="testimonials">
+  <div class="section-header">
+    <span class="section-tag">Avis Clients</span>
+    <h2 class="section-title">Ce Que Disent Nos Hôtes</h2>
+    <div class="section-line"></div>
+    <p class="section-desc" style="color:rgba(255,255,255,.6)">Classé #6 sur 33 hôtels à Ouagadougou sur TripAdvisor</p>
+  </div>
+  <div class="testimonials-grid" style="max-width:1100px;margin:0 auto">
+    <div class="testimonial-card" data-aos>
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"Un cadre exceptionnel ! La décoration africaine est magnifique, le personnel est aux petits soins et la piscine est parfaite pour se détendre après une journée de travail."</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">M</div>
+        <div>
+          <div class="testimonial-name">Marie Dupont</div>
+          <div class="testimonial-origin">France • Business Travel</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card" data-aos>
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"Le restaurant est fantastique ! Les plats africains sont préparés avec talent. L'atmosphère Out of Africa est unique. Je recommande à 100%."</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">K</div>
+        <div>
+          <div class="testimonial-name">Kofi Mensah</div>
+          <div class="testimonial-origin">Ghana • Vacances</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card" data-aos>
+      <div class="testimonial-stars">★★★★☆</div>
+      <p class="testimonial-text">"Très bon rapport qualité-prix pour Ouagadougou. Les chambres sont propres et bien décorées. Le petit-déjeuner est copieux et savoureux."</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">A</div>
+        <div>
+          <div class="testimonial-name">Aminata Traoré</div>
+          <div class="testimonial-origin">Burkina Faso • Séjour famille</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA ══ -->
+<div class="cta-section" style="margin:60px 5%">
+  <h2>Prêt à Vivre l'Expérience Ricardo ?</h2>
+  <p>Réservez dès maintenant et bénéficiez du meilleur tarif garanti. Petit-déjeuner inclus sur sélection.</p>
+  <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+    <a href="reservation.html" class="btn btn-outline btn-lg"><i class="fas fa-calendar-check"></i> Réserver En Ligne</a>
+    <a href="tel:+22625xxxxxx" class="btn btn-lg" style="background:white;color:var(--gold-dark)"><i class="fas fa-phone"></i> Appeler l'Hôtel</a>
+  </div>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo-text">
+        <span class="hotel-name">HÔTEL RICARDO</span>
+        <span class="hotel-city">OUAGADOUGOU • BURKINA FASO</span>
+      </div>
+      <p>Une expérience unique mêlant authenticité africaine et confort moderne au cœur de Ouagadougou depuis plus de 20 ans.</p>
+      <div class="footer-social">
+        <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-btn"><i class="fab fa-whatsapp"></i></a>
+        <a href="#" class="social-btn"><i class="fab fa-twitter"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="chambres.html">Chambres & Suites</a></li>
+        <li><a href="services.html">Services & Équipements</a></li>
+        <li><a href="reservation.html">Réservation</a></li>
+        <li><a href="contact.html">Nous Contacter</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Hébergement</h4>
+      <ul>
+        <li><a href="chambres.html?type=simple">Chambre Simple</a></li>
+        <li><a href="chambres.html?type=double">Chambre Double</a></li>
+        <li><a href="chambres.html?type=familiale">Chambre Familiale</a></li>
+        <li><a href="chambres.html?type=suite_junior">Suite Junior</a></li>
+        <li><a href="chambres.html?type=suite_presidentielle">Suite Présidentielle</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <div class="footer-contact-item"><i class="fas fa-map-marker-alt"></i><span>Secteur 15, Ouagadougou, Burkina Faso<br>À 2,5 km de l'aéroport</span></div>
+      <div class="footer-contact-item"><i class="fas fa-phone"></i><span>+226 25 XX XX XX<br>+226 70 XX XX XX</span></div>
+      <div class="footer-contact-item"><i class="fas fa-envelope"></i><span>contact@hotelricardo.com</span></div>
+      <div class="footer-contact-item"><i class="fas fa-clock"></i><span>Réception 24h/24</span></div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 Hôtel Ricardo Ouagadougou. Tous droits réservés.</p>
+    <div class="footer-pay">
+      <span class="footer-pay-badge">ORANGE MONEY</span>
+      <span class="footer-pay-badge">MOOV</span>
+      <span class="footer-pay-badge">TELECEL</span>
+      <span class="footer-pay-badge">VISA</span>
+      <span class="footer-pay-badge">PAYPAL</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

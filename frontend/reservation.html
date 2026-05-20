@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Réservation — Hôtel Ricardo Ouagadougou</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="navbar scrolled" id="navbar">
+  <a href="index.html" class="navbar-logo">
+    <div class="logo-icon"><i class="fas fa-crown"></i></div>
+    <div class="logo-text">
+      <span class="hotel-name">HÔTEL RICARDO</span>
+      <span class="hotel-city">OUAGADOUGOU</span>
+    </div>
+  </a>
+  <ul class="navbar-menu" id="navMenu">
+    <li><a href="index.html">Accueil</a></li>
+    <li><a href="chambres.html">Chambres</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="reservation.html" class="btn-reserve active">Réserver</a></li>
+  </ul>
+  <button class="navbar-toggle" id="navToggle"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="page-hero">
+  <div>
+    <div class="breadcrumb"><a href="index.html">Accueil</a><span>/</span><span>Réservation</span></div>
+    <h1>Réservation en Ligne</h1>
+    <p>Réservez votre chambre en quelques clics, paiement sécurisé</p>
+  </div>
+</div>
+
+<!-- STEPPER -->
+<div style="background:white;border-bottom:1px solid #E8DCC8;padding:20px 5%">
+  <div style="max-width:600px;margin:0 auto;display:flex;gap:0">
+    <div class="step active" data-step="1" style="flex:1;text-align:center;position:relative">
+      <div style="width:36px;height:36px;border-radius:50%;background:var(--gold);color:white;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;font-weight:700">1</div>
+      <div style="font-size:12px;font-weight:700;color:var(--gold)">Chambre</div>
+    </div>
+    <div style="flex:1;height:2px;background:#E8DCC8;margin-top:18px;align-self:flex-start"></div>
+    <div class="step" data-step="2" style="flex:1;text-align:center">
+      <div style="width:36px;height:36px;border-radius:50%;background:#E8DCC8;color:#999;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;font-weight:700" id="step2circle">2</div>
+      <div style="font-size:12px;font-weight:700;color:#999" id="step2label">Informations</div>
+    </div>
+    <div style="flex:1;height:2px;background:#E8DCC8;margin-top:18px;align-self:flex-start"></div>
+    <div class="step" data-step="3" style="flex:1;text-align:center">
+      <div style="width:36px;height:36px;border-radius:50%;background:#E8DCC8;color:#999;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;font-weight:700" id="step3circle">3</div>
+      <div style="font-size:12px;font-weight:700;color:#999" id="step3label">Paiement</div>
+    </div>
+  </div>
+</div>
+
+<section>
+<div style="max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 340px;gap:30px" id="reservationLayout">
+
+  <!-- FORMULAIRE PRINCIPAL -->
+  <div>
+    <!-- ÉTAPE 1: Choix chambre & dates -->
+    <div id="step1" class="form-card">
+      <h3><i class="fas fa-bed"></i> Choisir votre chambre</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Chambre *</label>
+          <select id="roomSelect" required>
+            <option value="">-- Sélectionner une chambre --</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Nombre de personnes *</label>
+          <select id="guestsSelect">
+            <option value="1">1 personne</option>
+            <option value="2" selected>2 personnes</option>
+            <option value="3">3 personnes</option>
+            <option value="4">4 personnes</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Date d'arrivée *</label>
+          <input type="date" id="checkIn" required>
+        </div>
+        <div class="form-group">
+          <label>Date de départ *</label>
+          <input type="date" id="checkOut" required>
+        </div>
+        <div class="form-group full">
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
+            <input type="checkbox" id="breakfastCheck" style="width:18px;height:18px;accent-color:var(--gold)">
+            Ajouter le petit-déjeuner (4 000 FCFA / personne / nuit)
+          </label>
+        </div>
+      </div>
+      <div id="availabilityMsg"></div>
+      <button onclick="goToStep2()" class="btn btn-primary" style="margin-top:8px">
+        Continuer <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+
+    <!-- ÉTAPE 2: Informations client -->
+    <div id="step2" class="form-card hidden">
+      <h3><i class="fas fa-user"></i> Vos informations</h3>
+      <div id="alertStep2"></div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Prénom & Nom *</label>
+          <input type="text" id="clientName" placeholder="Jean Dupont" required>
+        </div>
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" id="clientEmail" placeholder="jean@email.com" required>
+        </div>
+        <div class="form-group">
+          <label>Téléphone *</label>
+          <input type="tel" id="clientPhone" placeholder="+226 70 XX XX XX" required>
+        </div>
+        <div class="form-group full">
+          <label>Demandes spéciales</label>
+          <textarea id="specialRequests" placeholder="Chambre non-fumeur, étage élevé, lit bébé..."></textarea>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:8px">
+        <button onclick="goToStep1()" class="btn btn-dark"><i class="fas fa-arrow-left"></i> Retour</button>
+        <button onclick="submitReservation()" class="btn btn-primary" id="btnStep2">
+          <i class="fas fa-lock"></i> Confirmer la réservation
+        </button>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 3: Paiement -->
+    <div id="step3" class="form-card hidden">
+      <h3><i class="fas fa-credit-card"></i> Choisir le mode de paiement</h3>
+      <p style="color:var(--text-light);font-size:14px;margin-bottom:24px">Votre réservation est enregistrée. Complétez le paiement pour la confirmer.</p>
+
+      <div id="alertStep3"></div>
+
+      <div class="payment-methods">
+        <label class="payment-method-card" onclick="selectPayment(this,'orange_money')">
+          <input type="radio" name="payMethod" value="orange_money">
+          <div class="payment-logo logo-orange">OM</div>
+          <div class="payment-method-info"><div class="name">Orange Money</div><div class="desc">*144# • Burkina Faso</div></div>
+        </label>
+        <label class="payment-method-card" onclick="selectPayment(this,'moov_money')">
+          <input type="radio" name="payMethod" value="moov_money">
+          <div class="payment-logo logo-moov">MM</div>
+          <div class="payment-method-info"><div class="name">Moov Money</div><div class="desc">*555# • Burkina Faso</div></div>
+        </label>
+        <label class="payment-method-card" onclick="selectPayment(this,'telecel_money')">
+          <input type="radio" name="payMethod" value="telecel_money">
+          <div class="payment-logo logo-telecel">TM</div>
+          <div class="payment-method-info"><div class="name">Telecel Money</div><div class="desc">*808# • Burkina Faso</div></div>
+        </label>
+        <label class="payment-method-card" onclick="selectPayment(this,'coris_money')">
+          <input type="radio" name="payMethod" value="coris_money">
+          <div class="payment-logo logo-coris">CM</div>
+          <div class="payment-method-info"><div class="name">Coris Money</div><div class="desc">App mobile • BF</div></div>
+        </label>
+        <label class="payment-method-card" onclick="selectPayment(this,'stripe')">
+          <input type="radio" name="payMethod" value="stripe">
+          <div class="payment-logo logo-visa">VISA</div>
+          <div class="payment-method-info"><div class="name">Carte Bancaire</div><div class="desc">Visa / Mastercard</div></div>
+        </label>
+        <label class="payment-method-card" onclick="selectPayment(this,'paypal')">
+          <input type="radio" name="payMethod" value="paypal">
+          <div class="payment-logo logo-paypal">PP</div>
+          <div class="payment-method-info"><div class="name">PayPal</div><div class="desc">Paiement international</div></div>
+        </label>
+      </div>
+
+      <!-- Zone de formulaire dynamique selon méthode -->
+      <div class="payment-form-area" id="paymentFormArea">
+        <p style="color:var(--text-light);text-align:center;font-size:14px"><i class="fas fa-hand-pointer"></i> Sélectionnez un mode de paiement ci-dessus</p>
+      </div>
+
+      <button onclick="processPayment()" class="btn btn-primary btn-lg" style="width:100%;margin-top:20px" id="btnPay" disabled>
+        <i class="fas fa-lock"></i> Payer <span id="payAmountBtn"></span> FCFA
+      </button>
+    </div>
+
+    <!-- SUCCÈS -->
+    <div id="stepSuccess" class="form-card hidden" style="text-align:center">
+      <div style="font-size:70px;margin-bottom:20px">🎉</div>
+      <h2 style="font-family:var(--font-serif);color:var(--brown);font-size:28px;margin-bottom:12px">Réservation Confirmée !</h2>
+      <p style="color:var(--text-light);margin-bottom:24px">Votre paiement a été accepté. Vous recevrez un email de confirmation.</p>
+      <div style="background:var(--cream);border-radius:12px;padding:24px;margin-bottom:24px;text-align:left">
+        <div style="display:flex;justify-content:space-between;margin-bottom:12px">
+          <span style="color:var(--text-light);font-size:13px">Référence</span>
+          <span style="font-weight:700;color:var(--brown)" id="successRef"></span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:12px">
+          <span style="color:var(--text-light);font-size:13px">Chambre</span>
+          <span style="font-weight:700" id="successRoom"></span>
+        </div>
+        <div style="display:flex;justify-content:space-between">
+          <span style="color:var(--text-light);font-size:13px">Montant payé</span>
+          <span style="font-weight:700;color:var(--gold)" id="successAmount"></span>
+        </div>
+      </div>
+      <a href="index.html" class="btn btn-primary"><i class="fas fa-home"></i> Retour à l'accueil</a>
+    </div>
+  </div>
+
+  <!-- RÉSUMÉ -->
+  <div>
+    <div class="price-summary" id="priceSummary" style="position:sticky;top:100px">
+      <h3><i class="fas fa-receipt"></i> Récapitulatif</h3>
+      <div class="price-line"><span>Chambre</span><span id="summaryRoom">–</span></div>
+      <div class="price-line"><span>Arrivée</span><span id="summaryIn">–</span></div>
+      <div class="price-line"><span>Départ</span><span id="summaryOut">–</span></div>
+      <div class="price-line"><span>Nuits</span><span id="summaryNights">–</span></div>
+      <div class="price-line"><span>Prix / nuit</span><span id="summaryPricePerNight">–</span></div>
+      <div class="price-line" id="breakfastLine" style="display:none"><span>Petit-déjeuner</span><span id="summaryBreakfast">–</span></div>
+      <div class="price-line total"><span>Total</span><span id="summaryTotal">–</span></div>
+      <p style="font-size:11px;color:rgba(255,255,255,.5);margin-top:12px;text-align:center">
+        <i class="fas fa-shield-alt"></i> Paiement 100% sécurisé
+      </p>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<!-- MODAL ATTENTE PAIEMENT -->
+<div class="modal" id="paymentModal">
+  <div class="modal-overlay"></div>
+  <div class="modal-box" style="text-align:center">
+    <div style="font-size:48px;margin-bottom:20px" id="payModalIcon">⏳</div>
+    <h3 style="font-family:var(--font-serif);font-size:22px;color:var(--brown);margin-bottom:12px" id="payModalTitle">Paiement en cours...</h3>
+    <p style="color:var(--text-light);font-size:14px;margin-bottom:24px" id="payModalMsg">Veuillez valider la demande sur votre téléphone.</p>
+    <div id="payModalInstruction" style="background:rgba(201,146,10,.1);border-left:4px solid var(--gold);padding:16px;border-radius:0 8px 8px 0;text-align:left;font-size:13px;white-space:pre-line;margin-bottom:20px;display:none"></div>
+    <button onclick="simulatePaymentSuccess()" class="btn btn-primary" id="btnSimulate" style="margin-bottom:8px;width:100%">
+      <i class="fas fa-check"></i> Simuler : Paiement réussi ✓
+    </button>
+    <button onclick="closePaymentModal()" class="btn" style="background:var(--cream);color:var(--text);width:100%">Annuler</button>
+    <p style="font-size:11px;color:var(--text-light);margin-top:12px">* Mode démonstration — à remplacer par l'API réelle</p>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script src="js/reservation.js"></script>
+</body>
+</html>

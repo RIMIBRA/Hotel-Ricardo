@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Messages — Admin Hôtel Ricardo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-brand"><div class="brand-icon"><i class="fas fa-crown"></i></div><div class="brand-text"><div class="hotel-name">HÔTEL RICARDO</div><div class="hotel-sub">Administration</div></div></div>
+  <nav class="sidebar-nav">
+    <a href="dashboard.html" class="nav-item"><i class="fas fa-th-large"></i> Tableau de bord</a>
+    <a href="reservations.html" class="nav-item"><i class="fas fa-calendar-check"></i> Réservations</a>
+    <a href="paiements.html" class="nav-item"><i class="fas fa-credit-card"></i> Paiements</a>
+    <a href="chambres.html" class="nav-item"><i class="fas fa-bed"></i> Chambres</a>
+    <a href="messages.html" class="nav-item active"><i class="fas fa-envelope"></i> Messages</a>
+    <a href="../index.html" class="nav-item" target="_blank"><i class="fas fa-globe"></i> Voir le site</a>
+  </nav>
+  <div class="sidebar-footer"><div class="sidebar-user"><div class="user-avatar">A</div><div class="user-info"><div class="user-name">Administrateur</div></div><button class="btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button></div></div>
+</aside>
+
+<div class="main-content">
+  <div class="topbar">
+    <div class="topbar-title"><h1>Messages Clients</h1><p>Formulaire de contact du site</p></div>
+    <div class="topbar-actions"><span id="unreadCount" style="background:var(--danger);color:white;padding:4px 12px;border-radius:12px;font-size:12px;font-weight:700"></span></div>
+  </div>
+  <div class="content">
+    <div id="messagesList" style="display:flex;flex-direction:column;gap:12px">
+      <div style="text-align:center;padding:40px;color:#7A6A5A"><i class="fas fa-circle-notch fa-spin"></i></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL MESSAGE -->
+<div class="modal" id="msgModal">
+  <div style="position:absolute;inset:0" onclick="closeModal()"></div>
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3 class="modal-title" id="msgModalTitle">Message</h3>
+      <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div id="msgModalContent"></div>
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+      <a id="replyLink" href="#" class="btn btn-primary"><i class="fas fa-reply"></i> Répondre par email</a>
+    </div>
+  </div>
+</div>
+
+<script src="js/admin.js"></script>
+<script>
+checkAuth();
+let messages = [];
+
+const DEMO_MSGS = [
+  { id:1, name:'Amadou Sawadogo', email:'amadou@email.com', subject:'Demande de réservation groupe', message:'Bonjour, nous sommes un groupe de 15 personnes et souhaitons réserver plusieurs chambres pour le mois de juin. Pouvez-vous nous faire une offre ?', read:0, created_at:'2026-05-20T09:15:00' },
+  { id:2, name:'Claire Martin', email:'claire@email.com', subject:'Renseignements tarifs', message:'Bonjour, je souhaite connaître vos tarifs pour une suite en juillet pour deux adultes. Est-ce que le petit-déjeuner est inclus ?', read:0, created_at:'2026-05-19T16:30:00' },
+  { id:3, name:'Ibrahim Koné', email:'ibrahim@email.com', subject:'Événements & privatisation', message:'Je voudrais privatiser votre restaurant pour un dîner d\'affaires de 20 personnes. Quelles sont vos disponibilités et vos tarifs ?', read:1, created_at:'2026-05-18T11:00:00' }
+];
+
+async function loadMessages() {
+  messages = DEMO_MSGS;
+  try {
+    const r = await apiFetch('/dashboard/messages');
+    if (r && r.ok) messages = await r.json();
+  } catch {}
+
+  const unread = messages.filter(m => !m.read).length;
+  const countEl = document.getElementById('unreadCount');
+  if (unread > 0) { countEl.textContent = unread + ' non lu(s)'; countEl.style.display = 'inline'; }
+  else { countEl.style.display = 'none'; }
+
+  document.getElementById('messagesList').innerHTML = messages.map(m => `
+    <div onclick="openMsg(${m.id})" style="background:white;border-radius:10px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);cursor:pointer;border-left:4px solid ${m.read ? '#E8DCC8' : 'var(--gold)'};transition:.2s" onmouseover="this.style.transform='translateX(4px)'" onmouseout="this.style.transform=''">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+            <div style="width:36px;height:36px;border-radius:50%;background:${m.read ? '#E8DCC8' : 'var(--gold)'};display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:14px;flex-shrink:0">${m.name.charAt(0)}</div>
+            <div>
+              <div style="font-weight:700;font-size:14px;color:var(--brown)">${m.name} ${!m.read ? '<span style="background:var(--gold);color:white;padding:1px 8px;border-radius:10px;font-size:10px;margin-left:4px">NOUVEAU</span>' : ''}</div>
+              <div style="font-size:12px;color:#7A6A5A">${m.email}</div>
+            </div>
+          </div>
+          <div style="font-size:14px;font-weight:600;color:var(--brown);margin-bottom:4px">${m.subject||'(Sans sujet)'}</div>
+          <div style="font-size:13px;color:#7A6A5A;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:500px">${m.message}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;margin-left:16px">
+          <div style="font-size:12px;color:#7A6A5A">${formatDateTime(m.created_at)}</div>
+          <button onclick="event.stopPropagation();deleteMsg(${m.id})" class="btn btn-danger btn-sm" style="margin-top:8px"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+    </div>
+  `).join('') || '<div style="text-align:center;padding:60px;color:#7A6A5A"><i class="fas fa-inbox" style="font-size:40px;display:block;margin-bottom:12px"></i>Aucun message</div>';
+}
+
+function openMsg(id) {
+  const m = messages.find(x => x.id === id);
+  if (!m) return;
+  if (!m.read) { markRead(id); m.read = 1; loadMessages(); }
+  document.getElementById('msgModalTitle').textContent = m.subject || '(Sans sujet)';
+  document.getElementById('msgModalContent').innerHTML = `
+    <div style="background:var(--cream-light);border-radius:8px;padding:16px;margin-bottom:16px;font-size:13px">
+      <div><strong>De:</strong> ${m.name} &lt;${m.email}&gt;</div>
+      <div><strong>Date:</strong> ${formatDateTime(m.created_at)}</div>
+    </div>
+    <div style="font-size:14px;color:var(--text);line-height:1.7;white-space:pre-wrap">${m.message}</div>
+  `;
+  document.getElementById('replyLink').href = `mailto:${m.email}?subject=Re: ${m.subject||'Votre message'}&body=Bonjour ${m.name.split(' ')[0]},%0A%0A`;
+  document.getElementById('msgModal').classList.add('open');
+}
+
+async function markRead(id) {
+  try { await apiFetch(`/dashboard/messages/${id}/read`, { method:'PUT' }); } catch {}
+}
+
+function deleteMsg(id) {
+  if (!confirm('Supprimer ce message ?')) return;
+  messages = messages.filter(m => m.id !== id);
+  loadMessages();
+}
+
+function closeModal() { document.getElementById('msgModal').classList.remove('open'); }
+loadMessages();
+</script>
+</body>
+</html>
