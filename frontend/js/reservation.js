@@ -1,4 +1,4 @@
-const API = 'http://localhost:3000/api';
+const API = 'https://hotel-ricardo.onrender.com/api';
 let reservationData = {};
 let currentPaymentMethod = null;
 let currentTransactionId = null;
