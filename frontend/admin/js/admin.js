@@ -1,5 +1,4 @@
-const API = 'http://localhost:3000/api';
-
+const API = 'https://hotel-ricardo.onrender.com/api';
 // ── AUTH ──────────────────────────────────────────────────
 function getToken() { return localStorage.getItem('admin_token'); }
 function getUser() { try { return JSON.parse(localStorage.getItem('admin_user')); } catch { return null; } }
