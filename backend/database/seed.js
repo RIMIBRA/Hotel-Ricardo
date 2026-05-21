@@ -32,12 +32,11 @@ async function seed() {
     console.log(`${existingRooms.length} chambre(s) existante(s), ignorées.`);
   }
 
-  console.log('\n✅ Base de données initialisée!');
-  console.log('🌐 Ouvrez: frontend/index.html');
-  console.log('🔐 Admin: frontend/admin/login.html');
-  console.log('   Email: admin@hotelricardo.com');
-  console.log('   Mot de passe: Ricardo@2024!');
-  process.exit(0);
+  console.log('\n Base de données initialisée!');
 }
 
-seed().catch(err => { console.error(err); process.exit(1); });
+if (require.main === module) {
+  seed().then(() => process.exit(0)).catch(err => { console.error(err); process.exit(1); });
+}
+
+module.exports = { seed };
