@@ -26,9 +26,13 @@ async function apiFetch(endpoint, options = {}) {
     ...options,
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}`, ...(options.headers || {}) }
   };
-  const r = await fetch(`${API}${endpoint}`, opts);
-  if (r.status === 401) { logout(); return; }
-  return r;
+  try {
+    const r = await fetch(`${API}${endpoint}`, opts);
+    if (r.status === 401) { logout(); return null; }
+    return r;
+  } catch {
+    return null;
+  }
 }
 
 // ── FORMAT HELPERS ─────────────────────────────────────────
