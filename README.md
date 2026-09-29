@@ -6,7 +6,7 @@
 hotel-ricardo/
 ├── backend/               ← API Node.js
 │   ├── server.js          ← Point d'entrée serveur
-│   ├── .env               ← Variables d'environnement (clés API)
+│   ├── .env.example       ← Modèle des variables d'environnement (copier en .env)
 │   ├── database/
 │   │   ├── db.js          ← SQLite schema
 │   │   └── seed.js        ← Données initiales
@@ -48,10 +48,9 @@ npm start        # Démarre le serveur sur port 3000
 
 Puis ouvrir `frontend/index.html` dans votre navigateur.
 
-## Identifiants Admin
+## Accès Admin
 - **URL**: `frontend/admin/login.html`
-- **Email**: `admin@hotelricardo.com`
-- **Mot de passe**: `Ricardo@2024!`
+- Identifiants admin par défaut disponibles dans `backend/database/seed.js` — à changer avant toute mise en production réelle.
 
 ## Modes de paiement intégrés
 
@@ -66,7 +65,7 @@ Puis ouvrir `frontend/index.html` dans votre navigateur.
 
 ## Configuration paiements réels
 
-Éditez le fichier `backend/.env` :
+Copiez `backend/.env.example` en `backend/.env` (jamais commité), puis renseignez vos clés :
 
 ```env
 # YengaPay (agrégateur local — Orange, Moov, Telecel, Coris)
