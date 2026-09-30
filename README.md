@@ -48,9 +48,9 @@ npm start        # Démarre le serveur sur port 3000
 
 Puis ouvrir `frontend/index.html` dans votre navigateur.
 
-## Accès Admin
+## Identifiants Admin
 - **URL**: `frontend/admin/login.html`
-- Identifiants admin par défaut disponibles dans `backend/database/seed.js` — à changer avant toute mise en production réelle.
+- Les identifiants admin par défaut sont définis dans `backend/database/seed.js`. Pensez à les changer après la première connexion.
 
 ## Modes de paiement intégrés
 
